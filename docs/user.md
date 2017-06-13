@@ -106,6 +106,57 @@ $ sudo chown bob: foo.txt
 
 `chgrp`命令更改用户组，用法与`chown`命令类似。
 
+## useradd
+
+`useradd`命令用来新增用户。
+
+```bash
+$ useradd -G admin -d /home/bill -s /bin/bash -m bill
+```
+
+上面命令新增用户`bill`，参数`-G`指定用户所在的组，参数`d`指定用户的主目录，参数`s`指定用户的 Shell，参数`m`表示如果该目录不存在，则创建该目录。
+
+## usermod
+
+`usermod`命令用来修改用户的各项属性。
+
+```bash
+$ usermod -g sales jerry
+```
+
+上面的命令修改用户`jerry`属于的主要用户组为`sales`。
+
+```bash
+$ usermod -G sales jerry
+```
+
+上面的命令修改用户`jerry`属于的次要用户组为`sales`。
+
+## adduser
+
+`adduser`命令用来将一个用户加入用户组。
+
+```bash
+$ sudo adduser username grouptoadd
+```
+
+## groupadd
+
+`groupadd`命令用来新建一个用户组。
+
+```bash
+$ sudo groupadd group1
+$ sudo adduser foobar group1
+```
+
+## groupdel
+
+`groupdel`命令用来删除一个用户组。
+
+```bash
+$ sudo groupdel group1
+```
+
 ## passwd
 
 `passwd`命令用于修改密码。
