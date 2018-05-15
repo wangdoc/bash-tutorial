@@ -25,3 +25,9 @@ _krb_kadmin:*:231:-2:Open Directory Kerberos Admin Service:/var/empty:/usr/bin/f
 $ grep -r admin /etc/
 ```
 
+`-v`过滤包含某个词的行，即`grep`的逆操作。
+
+```bash
+# 显示所有包含 vim，但不包含 grep 的行
+$ ps | grep vim | grep -v grep
+```
