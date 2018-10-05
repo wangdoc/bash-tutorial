@@ -12,7 +12,28 @@ while condition; do
 done
 ```
 
-下面是一个例子。
+上面是多行的形式，也可以写成一行。
+
+```bash
+$ while true; do echo 'Hi, while looping ...'; done
+```
+
+上面的命令会无限执行，可以按下 Ctrl + c 停止。
+
+`while`部分也可以执行一个命令。
+
+```bash
+$ while echo 'ECHO'; do echo 'Hi, while looping ...'; done
+```
+
+`while`部分可以执行任意数量的命令，但是真伪只看最后一个命令的执行结果。
+
+```bash
+$ while true; false; do echo 'Hi, looping ...'; done
+$
+```
+
+上面代码运行后，不会有任何结果，因为`while`的最后一个命令是`false`。
 
 ```bash
 #!/bin/bash
@@ -98,7 +119,7 @@ continue 命令被包含在其它选择动作的末尾， 为的是更加高效�
 
 ## until
 
-这个 until 命令与 while 非常相似，除了当遇到一个非零退出状态的时候， while 退出循环， 而 until 不退出。一个 until 循环会继续执行直到它接受了一个退出状态零。
+`until`命令与`while`非常相似，除了当遇到一个非零退出状态的时候，`while`退出循环， 而`until`不退出。一个`until`循环会继续执行直到它接受了一个退出状态为零的情况。
 
 `until`的语法格式如下。
 
@@ -109,6 +130,16 @@ done
 ```
 
 下面是一个例子。
+
+```bash
+$ until false; do echo 'Hi, until looping ...'; done
+Hi, until looping ...
+Hi, until looping ...
+Hi, until looping ...
+^C
+```
+
+上面代码中，`until`的部分一直为`false`，导致命令无限运行，必须按下 Ctrl + c 终止。
 
 ```bash
 #!/bin/bash
