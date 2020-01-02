@@ -1,8 +1,10 @@
 # Bash 变量
 
+Shell 变量是变动的值，分成全局变量（又称环境变量）或局部变量两类。全局变量可以在所有 Shell 中访问，局部变量仅在当前 Shell 中可见。
+
 ## 环境变量
 
-环境变量是Shell环境提供的变量。`env`命令或`printenv`命令，可以显示所有全局变量。
+环境变量是系统环境提供的变量。`env`命令或`printenv`命令，可以显示所有全局变量。
 
 ```bash
 $ env
@@ -12,30 +14,39 @@ $ printenv
 
 下面是一些常用的环境变量。
 
-- `DISPLAY`：显示器的名字，通常是 ":0"，表示第一个显示器
-- `EDITOR`：文本编辑器的名字
-- `HOME`：用户的主目录
-- `LANG`：字符集以及语言编码，比如`zh_CN.UTF-8`
-- `PATH`：由冒号分开的目录列表，当输入可执行程序名后，会搜索这个目录列表
-- `PS1`：Shell提示符
-- `PWD`：当前工作目录
-- `SHELL`：Shell的名字
-- `TERM`：终端类型名，即终端仿真器所用的协议
-- `USER`：用户名
+- `BASHPID`：Bash 进程的进程 ID。
+- `DISPLAY`：显示器的名字，通常是 ":0"，表示第一个显示器。
+- `EDITOR`：文本编辑器的名字。
+- `HOME`：用户的主目录。
+- `HOST`：当前主机的名称。
+- `LANG`：字符集以及语言编码，比如`zh_CN.UTF-8`。
+- `PATH`：由冒号分开的目录列表，当输入可执行程序名后，会搜索这个目录列表。
+- `PS1`：Shell 提示符。
+- `PS2`: 输入多行命令时，次要的 Shell 提示符。
+- `PWD`：当前工作目录。
+- `SHELL`：Shell 的名字。
+- `TERM`：终端类型名，即终端仿真器所用的协议。
+- `USER`：当前用户的用户名。
 
-Bash 提供的特殊变量。
+Bash 还提供一些特殊变量。
 
 - `$` 进程的ID
 - `?` 上一个命令的退出码
 - `0` 脚本的名字
 
+查看单个环境变量的值，可以使用`printenv`命令或`echo`命令。
+
+```bash
+$ printenv PATH
+# 或者
+$ env $PATH
+```
+
 ## 自定义变量
 
-Bash 遇到变量，会自动创建。
+Bash 允许用户自定义变量。变量名必须遵守下面的规则。
 
-变量名的规则如下。
-
-- 由字母数字字符（字母和数字）和下划线字符组成。
+- 由字母、数字和下划线字符组成。
 - 第一个字符必须是一个字母或一个下划线。
 - 不允许出现空格和标点符号。
 
@@ -53,36 +64,94 @@ variable=value
 echo $variable
 ```
 
-Bash 没有数据类型的概念，所有的变量值都是字符串。
-
-下面是一些例子。
+`export`命令用来向子 Shell 输出变量。
 
 ```bash
-a=z                     # Assign the string "z" to variable a.
-b="a string"            # Embedded spaces must be within quotes.
-c="a string and $b"     # Other expansions such as variables can be
-                      # expanded into the assignment.
-d="\t\ta string\n"      # Escape sequences such as tabs and newlines.
-e=$(ls -l foo.txt)      # Results of a command.
-f=$((5 * 7))            # Arithmetic expansion.
+export NAME=value
 ```
 
-读取变量的时候，变量名可以被花括号`{}`包围，比如`$a`可以用`${a}`表示。
+上面命令执行以后，在当前 Shell 里面新建的子 Shell 就可以读取变量`$NAME`。
+
+`unset`命令用来删除一个变量。
+
+```bash
+unset NAME
+```
+
+Bash 没有数据类型的概念，所有的变量值都是字符串。
+
+下面是一些自定义变量的例子。
+
+```bash
+a=z                     # 变量 a 赋值为字符串 z
+b="a string"            # 变量值如果包含空格，就必须放在引号里面
+c="a string and $b"     # 变量值可以引用其他变量的值
+d="\t\ta string\n"      # 变量值可以使用转义字符
+e=$(ls -l foo.txt)      # 变量值可以是命令的执行结果
+f=$((5 * 7))            # 变量值可以是数学运算的结果
+```
+
+## 变量的读取
+
+变量名之前加上`$`，就可以读取变量值。
+
+```bash
+$ foo=bar
+$ echo $foo
+bar
+```
+
+读取变量的时候，变量名可以被花括号`{}`包围，比如`$a`可以用`${a}`表示，这样可以用于一些特殊情况，防止变量名的混淆。
 
 ```bash
 $ a=foo
 $ echo $a_file
-$
+
 $ echo ${a}_file
 foo_file
 ```
 
-上面代码中，`$a_file`不会有任何输出，因为Bash将其整个解释为变量。只有用花括号区分`$a`，才能正确显示。
+上面代码中，变量名`a_file`不会有任何输出，因为 Bash 将其整个解释为变量，而这个变量是不存在的。只有用花括号区分`$a`，将其替换为`foo`，才能正确显示。
 
 这对于变量名周围的上下文，使其意义变得不明确的情况，很有帮助。
 
 ```bash
 $ mv $filename ${filename}1
+```
+
+上面命令可以在当前文件名后面加上`1`。
+
+## 参数变量
+
+执行脚本的时候，可以在脚本后面附加参数。
+
+```bash
+$ script.sh foo bar
+```
+
+上面命令中，`foo`和`bar`就是执行时传入脚本的参数。
+
+脚本内部可以使用`$1`读取第一个参数，`$2`读取第二个参数，以此类推。用户最多可以有9个参数。
+
+`$0`表示当前脚本的名称。
+
+我们看一个示例脚本`script.sh`。
+
+```bash
+#script.sh
+#! /bin/sh
+echo $0
+echo $1
+echo $2
+```
+
+运行结果如下。
+
+```bash
+$ ./script.sh foo bar
+./script.sh
+foo
+bar
 ```
 
 ## 空变量的默认值
@@ -96,18 +165,14 @@ ${varname:-word}
 # 如果变量名存在且不为 null，返回它的值，否则将它设为 word 且返回word
 ${varname:=word}
 
-# 如果变量名存在且不为null，返回 word，否则返回 null
+# 如果变量名存在且不为 null，返回 word，否则返回 null
 ${varname:+word}
 
-# 执行字符串扩展。返回从 offset 开始的 $varname，直到满足指定长度
+# 执行字符串操作，返回从 offset 开始的 $varname，直到满足指定长度
 ${varname:offset:length}
 ```
 
-```bash
-${parameter:-word}
-```
-
-若 parameter 没有设置（例如，不存在）或者为空，展开结果是 word 的值。若 parameter 不为空，则展开结果是 parameter 的值。
+下面是一个例子。
 
 ```bash
 $ foo=
@@ -191,6 +256,51 @@ ${variable//pattern/string}
 
 # 返回字符串的长度
 ${#varname}
+```
+
+```bash
+# removes the shortest possible match from the left:
+${VAR#pattern}
+
+$ file=/home/tux/book/book.tar.bz2
+$ echo ${file#*/}
+home/tux/book/book.tar.bz2
+```
+
+${VAR##pattern}
+removes the longest possible match from the left:
+
+```bash
+$ file=/home/tux/book/book.tar.bz2
+$ echo ${file##*/}
+book.tar.bz2
+```
+
+${VAR%pattern}
+removes the shortest possible match from the right:
+
+```bash
+$ file=/home/tux/book/book.tar.bz2
+$ echo ${file%.*}
+/home/tux/book/book.tar
+```
+
+${VAR%%pattern}
+removes the longest possible match from the right:
+
+```bash
+$ file=/home/tux/book/book.tar.bz2
+$ echo ${file%%.*}
+/home/tux/book/book
+```
+
+${VAR/pattern_1/pattern_2}
+substitutes the content of VAR from the PATTERN_1 with PATTERN_2:
+
+```bash
+$ file=/home/tux/book/book.tar.bz2
+$ echo ${file/tux/wilber}
+/home/wilber/book/book.tar.bz2
 ```
 
 ## 返回变量名的展开
@@ -568,20 +678,4 @@ $ set +u
 $ echo $VAR1
 
 ```
-
-## printenv
-
-`printenv`命令显示所有环境变量。
-
-```bash
-$ printenv
-```
-
-`printenv`也可以显示单个环境变量的值。
-
-```bash
-$ printenv USER
-```
-
-注意，这里的变量名之前，不需要使用`$`。
 
