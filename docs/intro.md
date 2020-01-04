@@ -32,20 +32,6 @@ $ pwe
 bash: pwe：未找到命令
 ```
 
-Shell 命令的用法基本都是下面的格式。
-
-```bash
-$ command [ arg1 ... [ argN ]
-```
-
-上面代码中，`command`是可执行文件或命令，`arg1 ... argN`是传递给命令的参数，它们是可选的。
-
-```bash
-$ ls -l
-```
-
-上面这个命令中，`ls`是命令，`-l`是参数。
-
 ## Bash 的由来
 
 Shell 伴随着 Unix 系统的诞生而诞生。1969年，Ken Thompson 和 Dennis Ritchie 开发了第一版的 Unix。1971年，Ken Thompson 编写了最初的 Shell，称为 Thompson shell。它的程序名是`sh`。
@@ -61,6 +47,43 @@ Thompson shell、Mashey shell 和 Bourne shell 都是贝尔实验室的产品，
 20世纪80年代早期，David Korn 开发了Korn shell，程序名是`ksh`。
 
 1985年，Richard Stallman 成立了自由软件基金会（FSF），决定写一个具有自由版本的、属于 GNU 许可证的 Shell，避免 Unix 的版权争议。1988年，自由软件基金会的第一个付薪程序员 Brian Fox 写了一个 Shell，功能基本上是 Bourne shell 的克隆，叫做 Bourne-Again SHell，简称 Bash，程序名也是`bash`。后来，它逐渐成为 Linux 系统的标准 Shell。
+
+## 命令的格式
+
+Shell 命令的用法基本都是下面的格式。
+
+```bash
+$ command [ arg1 ... [ argN ]
+```
+
+上面代码中，`command`是可执行文件或命令，`arg1 ... argN`是传递给命令的参数，它们是可选的。
+
+```bash
+$ ls -l
+```
+
+上面这个命令中，`ls`是命令，`-l`是参数。
+
+有些参数是命令的配置项，这些配置项一般都以一个连词线开头，比如上面的`-l`。同一个配置项往往有长和短两种形式，短形式便于手工输入，长脚本用在脚本之中，便于解释自身的含义，它们的作用完全一样。
+
+```bash
+# 短形式
+$ ls -r
+
+# 长形式
+$ ls --reverse
+```
+
+上面命令中，`-r`和`--reverse`作用完全一样，前者便于输入，后者便于理解。
+
+Bash 单个命令一般都是一行，用户按下回车键，就开始执行。有些命令比较长，写成多行会有利于阅读和编辑，这时可以在每一行的结尾加上反斜杠，Bash 会将下一行跟当前行放在一起解释。
+
+```bash
+$ echo foo bar
+# 等同于
+$ echo foo \
+bar
+```
 
 ## Bash 的快捷键
 
