@@ -69,13 +69,49 @@ echo 'Hello World!'
 echo 'Hello World!' # 井号后面的部分也是注释
 ```
 
+## 启动顺序
+
+每一个 Bash 脚本启动的时候，会读取一系列配置文件。这分成登录 Shell 和非登录 Shell 两种情况。
+
+登录 Shell 读取配置文件的顺序如下。
+
+- `/etc/profile`：所有用户的全局配置。
+- `~/.bash_profile`：用户的个人配置，可用于扩展或覆盖全局配置。
+- `~/.bash_login`：如果找不到`~/.bash_profile`，Bash 则尝试读取此文件。
+- `~/.profile`：如果找不到`~/.bash_profile`和`~/.bash_login`，Bash 尝试读取此文件。
+
+非登录 Shell 读取配置文件的顺序如下。
+
+- `/etc/bash.bashrc`：所有用户的全局配置。
+- `~/.bashrc`：用户的个人配置，可用于扩展或覆盖全局配置。
+
+除了读取上面的配置文件之外，非登录 Shell 还会从它的父进程继承环境变量。
+
+普通用户对 Shell 的配置修改，一般写在`~/.bashrc`文件里面。非登录 Shell 默认会读取这个文件，而登录 Shell 大多数情况下也会通过变通方法读取该文件。比如，`.bash_profile`文件通常会像下面这样写。
+
+```bash
+# .bash_profile
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+PATH=$PATH:$HOME/bin
+export PATH
+```
+
+上面代码中，如果`~/.bashrc`文件存在，就会执行这个文件。这就是“登录 Shell”读取`~/.bashrc`的方法。另外，最后两行的作用是在环境变量`$PATH`里面，追加`$HOME/bin`目录，然后`export`命令的作用是将这个变量输出给当前 Shell 的所有子进程。
+
 ## 别名
 
-`alias`命令用来为命令指定别名。
+`alias`命令用来为一个命令指定别名。
 
 ```bash
 alias NAME=DEFINITION
 ```
+
+上面命令中，`Name`是新命令的名称，`DEFINITION`是这个新命令对应的要执行的事情。
 
 下面的例子是指定`ls -ltr`命令的别名为`lt`，运行结果是按照修改时间（`-t`）的倒序（`-r`），列出文件的详细信息（`-l`）。
 
@@ -83,7 +119,15 @@ alias NAME=DEFINITION
 $ alias lt='ls -ltr'
 ```
 
-指定别名以后，就可以像使用其他命令一样使用别名。
+指定别名以后，就可以像使用其他命令一样使用别名。一般来说，都会把常用的别名写在`~/.bashrc`的末尾。
+
+下面是定义一个`today`命令的写法。
+
+```bash
+$ alias today='date +"%A, %B %-d, %Y"'
+$ today
+星期一, 一月 6, 2020
+```
 
 直接调用`alias`命令，可以显示所有别名。
 
@@ -97,9 +141,38 @@ $ alias
 $ unalias lt
 ```
 
+## 程序
+
+别名只适合封装简单的单个命令，如果要封装复杂的多行命令，就需要 Bash 函数。
+
+Bash 函数的语法如下。
+
+```bash
+fn() {
+  # codes
+}
+```
+
+上面命令中，`fn`是自定义的函数名，函数代码就写在大括号之中。
+
+下面是显示当前日期时间的函数。
+
+```bash
+today() {
+  echo -n "Today's date is: "
+  date +"%A, %B %-d, %Y"
+}
+```
+
+这个函数可以写在脚本文件里面，调用的时候直接写函数名即可。
+
+```bash
+$ today
+```
+
 ## env 命令
 
-`env`命令总是在`/usr/bin`里面，它会在指定环境之中运行一个程序。`/usr/bin/env bash`的意思是，找到`bash`的可执行文件。
+`env`命令的可执行文件总是在`/usr/bin`目录里面，作用是在指定环境之中运行一个程序。`/usr/bin/env bash`的意思是，找到`bash`的可执行文件，然后在 Bash 环境中运行脚本。
 
 相应的，如果要执行Node脚本，可以写成下面这样。
 
