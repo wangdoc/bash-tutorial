@@ -95,6 +95,24 @@ bar
 set -o xtrace
 ```
 
+脚本当中如果要关闭命令输出，可以使用`set +x`。
+
+```bash
+#!/bin/bash
+
+number=1
+
+set -x
+if [ $number = "1" ]; then
+  echo "Number equals 1"
+else
+  echo "Number does not equal 1"
+fi
+set +x
+```
+
+上面的例子中，只对特定的代码段打开命令输出。
+
 ## Bash 的错误处理
 
 如果脚本里面有运行失败的命令（返回值非0），Bash 默认会继续执行后面的命令。
