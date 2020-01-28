@@ -359,6 +359,17 @@ $ bash demo.sh
 
 `read`命令的参数，就是保存用户输入内容的变量名。如果省略了`read`命令的参数，用户输入的内容会保存在环境变量`REPLY`。
 
+`read`可以接受用户输入的多个值。
+
+```bash
+#!/bin/bash
+echo Please, enter your firstname and lastname
+read FN LN
+echo "Hi! $LN, $FN !"
+```
+
+上面例子中，`read`根据用户的输入，同时为两个变量赋值。
+
 `read`命令的`-t`参数，设置了超时的秒数。如果超过了指定时间，用户仍然没有输入，脚本将放弃等待，继续向下执行。
 
 ```bash
