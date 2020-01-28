@@ -753,3 +753,41 @@ $ echo $VAR1
 
 ```
 
+## declare 命令
+
+`declare`命令用来为声明变量，提供更多的限制。
+
+```bash
+declare OPTION(s) VARIABLE=value
+```
+
+- `-a` 变量是一个数组。
+- `-f` 仅使用函数名称。
+- `-i` 该变量将被视为整数；给变量赋值时执行算术评估。
+- `-p`：显示每个变量的属性和值。使用-p时，将忽略其他选项。
+- `-r`：使变量为只读。然后，这些变量不能被后续的赋值语句赋值，也不能被取消设置。
+- `-t`：给每个变量跟踪属性。
+- `-X`：标记每个变量以通过环境导出到后续命令。
+
+```bash
+$ declare -i VARIABLE=12
+$ VARIABLE=string
+$ echo $VARIABLE
+0
+$ declare -p VARIABLE
+declare -i VARIABLE="0"
+```
+
+## readonly 命令
+
+`readonly`命令可以创建常量。
+
+```bash
+readonly OPTION VARIABLE(s)
+```
+
+```bash
+$ readonly TUX=penguinpower
+$ TUX=Mickeysoft
+bash: TUX: readonly variable
+```
