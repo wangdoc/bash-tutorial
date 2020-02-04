@@ -16,13 +16,20 @@ Shell 这个单词的原意是“外壳”，跟 kernel （内核）相对应，
 
 Shell 有很多种，只要能给用户提供命令行环境的程序，都可以看作是 Shell。历史上，主要的 Shell 有 Bourne Shell（缩写为`sh`）、Bourne Again shell（缩写为`bash`）、C Shell（缩写为`csh`）、TENEX C Shell（缩写为`tcsh`）、Korn shell（缩写为`ksh`）、Z Shell（缩写为`zsh`）、Friendly Interactive Shell（缩写为`fish`）。Bash 是目前最常用的 Shell，除非特别指明，下文的 Shell 和 Bash 当作同义词使用，可以互换。
 
+下面的命令可以查看当前运行的 Shell。
+
+```bash
+$ echo $SHELL
+/bin/bash
+```
+
 下面的命令可以查看当前的 Linux 系统安装的所有 Shell。
 
 ```bash
 $ cat /etc/shells
 ```
 
-上面命令中，`$`是命令行环境的提示符，用户只需要输入提示符后面的内容。`cat`命令可以显示文件内容，所以上面命令的意思，就是显示`/etc/shells`这个文件的内容，里面记录了当前文件安装的所有 Shell。
+上面两个命令中，`$`是命令行环境的提示符，用户只需要输入提示符后面的内容。
 
 Linux 允许每个用户使用不同的 Shell，用户的默认 Shell 一般都是 Bash。
 
@@ -44,14 +51,28 @@ Linux 允许每个用户使用不同的 Shell，用户的默认 Shell 一般都�
 
 注意，根用户（root）的提示符，不以美元符号（`$`）结尾，而以井号（`#`）结尾，用来提醒用户，现在具有根权限，可以执行各种操作，务必小心，不要出现误操作。
 
-为了简洁，后文的命令行提示符都只使用`$`表示，用户只需输入这个符号后面的命令。你可以输入`pwd`命令，按下回车键，就会显示当前所在的目录。
+为了简洁，后文的命令行提示符都只使用`$`表示。
+
+进入命令行环境以后，一般就已经打开 Bash 了。如果你的 Shell 不是 Bash，可以输入`bash`命令启动 Bash。
+
+```bash
+$ bash
+```
+
+退出 Bash 环境，可以使用`exit`命令，也可以同时`Ctrl + d`。
+
+```bash
+$ exit
+```
+
+作为练习，可以试着输入`pwd`命令。按下回车键，就会显示当前所在的目录。
 
 ```bash
 $ pwd
-/home/user
+/home/me
 ```
 
-Shell 对用户相当友好。如果不小心输入了`pwe`，会返回一个提示，表示没有找到这个命令对应的可执行程序。
+Shell 对用户相当友好。如果不小心输入了`pwe`，会返回一个提示，表示输入出错，没有对应的可执行程序。
 
 ```bash
 $ pwe
@@ -131,7 +152,6 @@ Bash 单个命令一般都是一行，用户按下回车键，就开始执行。
 $ echo foo bar
 
 # 等同于
-
 $ echo foo \
 bar
 ```
