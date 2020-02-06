@@ -1,16 +1,23 @@
-# 历史
+# Bash 操作历史
 
-Bash 会保留用户的操作历史，保存在`~/.bash_history`这个文件里面。
+Bash 会保留用户的操作历史，即用户输入的每一条命令。退出当前 Shell 的时候，Bash 会将用户刚才的操作历史写入`~/.bash_history`文件。
+
+环境变量`$HISTFILE`总是指向这个文件。
+
+```bash
+$ echo $HISTFILE
+/home/me/.bash_history
+```
 
 ## history 命令
 
-`history`命令能显示操作历史。最近的例子在最后面，所有的例子带有行号。
+`history`命令能显示操作历史。最近的操作在最后面，所有的操作都带有行号。
 
 ```bash
 $ history
 ```
 
-通过定制操作历史的模块，可以显示每个操作的时间。
+通过定制环境变量`$HISTTIMEFORMAT`，可以保留每个操作的时间。
 
 ```bash
 $ export HISTTIMEFORMAT='%F %T  '
