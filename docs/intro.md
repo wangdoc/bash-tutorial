@@ -178,25 +178,6 @@ $ type echo
 echo is a shell builtin
 ```
 
-## 配置文件
-
-Shell 按照调用方式分成两种：登录 Shell（login shell）和非登录 Shell（non-login shell）。
-
-（1）登录 Shell
-
-登录 Shell 指的是登录系统时进入的那个 Shell，通常必须先输入用户名和密码。启动时，它依次执行下面的配置文件，完成用户环境的初始化配置。
-
-- `/etc/profile`：系统级配置文件。
-- `/etc/profile`会调用`/etc/profile.d/`目录中的脚本。
-- `~/.bash_profile`、`~/.bash_login`、`~/.profile`：用户的个人配置。这三个脚本依次只要发现一个，就不再执行其余的脚本。
-- 上面三个脚本会调用`~/.bashrc`。
-
-用户退出登录 Shell 时，Shell 自动执行`~/.bash_logout`。
-
-（2）非登录 Shell
-
-非登录 Shell 指的是，用户在命令行手动启动的 Shell，这时不会进行环境初始化。启动时，非登录 Shell 会自动执行`~/.bashrc`。
-
 ## Bash 的快捷键
 
 Bash 有以下快捷键，可以大大方便操作。
