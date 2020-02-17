@@ -280,7 +280,7 @@ $ set -o vi
 $ set -o emacs
 ```
 
-## 总结
+## set 命令总结
 
 `set`命令的上面这四个参数，一般都放在一起使用。
 
@@ -299,6 +299,34 @@ set -o pipefail
 
 ```bash
 $ bash -euxo pipefail script.sh
+```
+
+## shopt 命令
+
+`shopt`命令用来调整 Shell 的参数，跟`set`命令的作用很类似。主要原因是`set`是从 Ksh 继承的，属于 POSIX 规范的一部分，而`shopt`是 Bash 特有的。
+
+接输入`shopt`可以查看所有参数，以及它们各自打开和关闭的状态。
+
+```bash
+$ shopt
+```
+
+`-s`用来打开某个参数。
+
+```bash
+$ shopt -s optionNameHere
+```
+
+`-u`用来关闭某个参数。
+
+```bash
+$ shopt -u optionNameHere
+```
+
+举例来说，`histappend`这个参数表示退出当前 Shell 时，将操作历史追加到历史文件中。这个参数默认是打开的，如果使用下面的命令将其关闭，那么当前 Shell 的操作历史将替换掉整个历史文件。
+
+```bash
+$ shopt -u histappend
 ```
 
 ## 参考链接
