@@ -174,9 +174,29 @@ ls is hashed (/bin/ls)
 `type`命令本身也是内置命令。
 
 ```bash
-$ type echo
-echo is a shell builtin
+$ type type
+type is a shell builtin
 ```
+
+如果要查看一个命令的所有定义，可以使用`type -a`。
+
+```bash
+$ type -a echo
+echo is shell builtin
+echo is /usr/bin/echo
+echo is /bin/echo
+```
+
+`type`命令的`-t`参数，可以返回一个命令的类型：别名（alias），关键词（keyword），函数（function），内置命令（builtin）和文件（file）。
+
+```bash
+$ type -t bash
+file
+$ type -t if
+keyword
+```
+
+上面例子中，`bash`是文件，`if`是关键词。
 
 ## Bash 的快捷键
 

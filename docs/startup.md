@@ -116,6 +116,29 @@ $include /etc/inputrc
 $ source .bashrc
 ```
 
+`source`命令最大的特点是在当前 Shell 执行脚本，不像直接执行脚本时，会新建一个子 Shell。所以，`source`命令执行脚本时，不需要`export`变量。
+
+```bash
+# test.sh
+echo $foo
+```
+
+上面脚本输出`$foo`变量的值。
+
+```bash
+# 当前 Shell 新建一个变量 foo
+$ foo=1
+
+# 打印输出 1
+$ source test.sh
+1
+
+# 打印输出空字符串
+$ bash test.sh
+```
+
+上面例子中，当前 Shell 的变量`foo`并没有`export`，所以直接执行无法读取，但是`source`执行可以读取。
+
 `source`有一个简写形式，可以使用一个点（`.`）来表示。
 
 ```bash
