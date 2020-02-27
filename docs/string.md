@@ -1,6 +1,24 @@
 # 字符串操作
 
+## 字符串的长度
+
+获取字符串长度的语法如下。
+
+```bash
+${#varname}
+```
+
+下面是一个例子。
+
+```bash
+$ path=/home/cam/book/long.file.name
+$ echo ${#path}
+29
+```
+
 ## 返回子字符串
+
+Bash 返回一个字符串的子串，语法如下。
 
 ```bash
 ${varname:offset:length}
@@ -26,75 +44,150 @@ footman
 
 上面例子是返回变量`count`从4号位置一直到结尾的子字符串。
 
-## 字符串的替换
+## 字符串的处理
+
+Bash 提供字符串处理的多种方法。
+
+**（1）删除开头的匹配。**
+
+以下语法可以删除字符串开头匹配的部分，但不会改变原始变量。匹配模式可以使用`*`、`?`、`[]`等通配符。
 
 ```bash
-# 如果 pattern 匹配字符串开头，删除非贪婪匹配的部分，返回其他
+# 如果 pattern 匹配变量 variable 的开头，
+# 删除最短匹配（非贪婪匹配）的部分，返回剩余部分
 ${variable#pattern}
 
-# 如果 pattern 匹配字符串开头，删除贪婪匹配的部分，返回其他
+# 如果 pattern 匹配变量 variable 的开头，
+# 删除最长匹配（贪婪匹配）的部分，返回剩余部分
 ${variable##pattern}
+```
 
-# 如果 pattern 匹配字符串结尾，删除非贪婪匹配部分，返回其他
+上面两种语法会删除变量字符串开头的匹配部分，返回剩下的部分。区别是一个是最短匹配（又称非贪婪匹配），另一个是最长匹配（又称贪婪匹配）。
+
+下面是一个例子。
+
+```bash
+$ path=/home/cam/book/long.file.name
+
+$ echo ${path#/*/}
+cam/book/long.file.name
+
+$ echo ${path##/*/}
+long.file.name
+```
+
+上面例子中，匹配模式是`/*/`，其中`*`可以匹配任意的多个字符，所以最短匹配是`/home/`，最长匹配是`/home/cam/book/`。
+
+下面写法可以删除文件路径的目录部分，只留下文件名。
+
+```bash
+$ path=/home/cam/book/long.file.name
+
+$ echo ${path##*/}
+long.file.name
+```
+
+上面例子中，模式`*/`匹配目录部分，所以只返回文件名。
+
+**（2）删除结尾的匹配。**
+
+以下语法可以删除字符串结尾匹配的部分，但不会改变原始变量。
+
+```bash
+# 如果 pattern 匹配变量 variable 的结尾，
+# 删除最短匹配（非贪婪匹配）的部分，返回剩余部分
 ${variable%pattern}
 
-# 如果 pattern 匹配字符串结尾，删除贪婪匹配部分，返回其他
+# 如果 pattern 匹配变量 variable 的结尾，
+# 删除最长匹配（贪婪匹配）的部分，返回剩余部分
 ${variable%%pattern}
+```
 
-# 贪婪匹配 pattern 的部分被 string 替换，仅仅替换第一个匹配
+上面两种语法会删除变量字符串结尾的匹配部分，返回剩下的部分。区别是一个是最短匹配（又称非贪婪匹配），另一个是最长匹配（又称贪婪匹配）。
+
+下面是一个例子。
+
+```bash
+$ path=/home/cam/book/long.file.name
+
+$ echo ${path%.*}
+/home/cam/book/long.file
+
+$ echo ${path%%.*}
+/home/cam/book/long
+```
+
+上面例子中，匹配模式是`.*`，其中`*`可以匹配任意的多个字符，所以最短匹配是`.name`，最长匹配是`.file.name`。
+
+下面写法可以删除文件路径的文件名部分，只留下目录部分。
+
+```bash
+$ path=/home/cam/book/long.file.name
+
+$ echo ${path%/*}
+/home/cam/book
+```
+
+上面例子中，模式`/*`匹配文件名部分，所以只返回目录部分。
+
+下面的写法可以替换文件的后缀名。
+
+```bash
+$ file=foo.png
+$ echo ${file%.png}.jpg
+foo.jpg
+```
+
+上面的例子将文件的后缀名，从`.png`改成了`.jpg`。
+
+**（3）替换子串。**
+
+以下语法可以将字符串的最长匹配（贪婪匹配），换成其他的字符串返回，但不会改变原始变量。
+
+```bash
+# 如果 pattern 匹配变量 variable 的一部分，
+# 最长匹配（贪婪匹配）的那部分被 string 替换，但仅替换第一个匹配
 ${variable/pattern/string}
 
-# 贪婪匹配 pattern 的部分被 string 替换，所有匹配都替换
+# 如果 pattern 匹配变量 variable 的一部分，
+# 最长匹配（贪婪匹配）的那部分被 string 替换，所有匹配都替换
 ${variable//pattern/string}
-
-# 返回字符串的长度
-${#varname}
 ```
+
+上面两种语法都是最长匹配（贪婪匹配）下的替换，区别是前一个语法仅仅替换第一个匹配，后一个语法替换所有匹配。
+
+下面是一个例子。
 
 ```bash
-# removes the shortest possible match from the left:
-${VAR#pattern}
+$ path=/home/cam/foo/foo.name
 
-$ file=/home/tux/book/book.tar.bz2
-$ echo ${file#*/}
-home/tux/book/book.tar.bz2
+$ echo ${path/foo/bar}
+/home/cam/bar/foo.name
+
+$ echo ${path//foo/bar}
+/home/cam/bar/bar.name
 ```
 
-${VAR##pattern}
-removes the longest possible match from the left:
+上面例子中，前一个命令只替换了第一个`foo`，后一个命令将两个`foo`都替换了。
+
+下面的例子将分隔符从`:`换成换行符。
 
 ```bash
-$ file=/home/tux/book/book.tar.bz2
-$ echo ${file##*/}
-book.tar.bz2
+$ echo -e ${PATH//:/'\n'}
 ```
 
-${VAR%pattern}
-removes the shortest possible match from the right:
+上面例子中，`echo`命令的`-e`参数，表示将替换后的字符串的`\n`字符，解释为换行符。
+
+如果省略了`string`部分，那么就相当于匹配的部分替换成空字符串，即删除匹配的部分。
 
 ```bash
-$ file=/home/tux/book/book.tar.bz2
-$ echo ${file%.*}
-/home/tux/book/book.tar
+$ path=/home/cam/foo/foo.name
+
+$ echo ${path/.*/}
+/home/cam/foo/foo
 ```
 
-${VAR%%pattern}
-removes the longest possible match from the right:
-
-```bash
-$ file=/home/tux/book/book.tar.bz2
-$ echo ${file%%.*}
-/home/tux/book/book
-```
-
-${VAR/pattern_1/pattern_2}
-substitutes the content of VAR from the PATTERN_1 with PATTERN_2:
-
-```bash
-$ file=/home/tux/book/book.tar.bz2
-$ echo ${file/tux/wilber}
-/home/wilber/book/book.tar.bz2
-```
+上面例子中，第二个斜杠后面的`string`部分省略了，所以模式`.*`匹配的部分`.name`被删除后返回。
 
 ## 返回变量名的展开
 
