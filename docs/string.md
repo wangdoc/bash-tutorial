@@ -44,6 +44,18 @@ footman
 
 上面例子是返回变量`count`从4号位置一直到结尾的子字符串。
 
+如果`offset`为负值，表示从字符串的末尾开始算起。注意，负数前面必须有一个空格， 以防止与`${variable:-word}`的变量设置默认值的形式混淆。这时，如果还指定`length`，则`length`不能小于零。
+
+```bash
+$ foo="This string is long."
+$ echo ${foo: -5}
+long.
+$ echo ${foo: -5:2}
+lo
+```
+
+上面例子中，`offset`为`-5`，表示从倒数第5个字符开始截取，所以返回`long.`。如果指定长度为`2`，则返回`lo`。
+
 ## 字符串的处理
 
 Bash 提供字符串处理的多种方法。
@@ -189,112 +201,17 @@ $ echo ${path/.*/}
 
 上面例子中，第二个斜杠后面的`string`部分省略了，所以模式`.*`匹配的部分`.name`被删除后返回。
 
-## 返回变量名的展开
-
-`${!prefix*}`和`${!prefix@}`，会返回以 prefix 开头的已有变量名，它们的执行结果相同。
+这个语法还有两种扩展形式。
 
 ```bash
-$ echo ${!BASH*}
-BASH BASH_ARGC BASH_ARGV BASH_COMMAND BASH_COMPLETION
-BASH_COMPLETION_DIR BASH_LINENO BASH_SOURCE BASH_SUBSHELL
-BASH_VERSINFO BASH_VERSION
+# 模式必须出现在字符串的开头
+${variable/#pattern/string}
+
+# 模式必须出现在字符串的结尾
+${variable/%pattern/string}
 ```
 
-## 字符串的展开
-
-字符串长度
-
-```bash
-${#parameter}
-```
-
-`${#parameter}`展开成由 parameter 所包含的字符串的长度。通常，parameter 是一个字符串；然而，如果 parameter 是`@`或者是`*` 的话， 则展开结果是位置参数的个数。
-
-```bash
-$ foo="This string is long."
-$ echo "'$foo' is ${#foo} characters long."
-'This string is long.' is 20 characters long.
-```
-
-截取子字符串。
-
-```bash
-${parameter:offset}
-
-${parameter:offset:length}
-```
-
-这些展开用来从 parameter 所包含的字符串中提取一部分字符。提取的字符始于 第 offset 个字符（从字符串开头算起）直到字符串的末尾，除非指定提取的长度。
-
-```bash
-$ foo="This string is long."
-$ echo ${foo:5}
-string is long.
-$ echo ${foo:5:6}
-string
-```
-
-若 offset 的值为负数，则认为 offset 值是从字符串的末尾开始算起，而不是从开头。注意负数前面必须有一个空格， 为防止与 ${parameter:-word} 展开形式混淆。length，若出现，则必须不能小于零。
-
-```bash
-$ foo="This string is long."
-$ echo ${foo: -5}
-long.
-$ echo ${foo: -5:2}
-lo
-```
-
-如果 parameter 是 @，展开结果是 length 个位置参数，从第 offset 个位置参数开始。
-
-清除匹配的模式
-
-```bash
-${parameter#pattern}
-
-${parameter##pattern}
-```
-
-这些展开会从 paramter 所包含的字符串中清除开头一部分文本，这些字符要匹配定义的 patten。pattern 是 通配符模式，就如那些用在路径名展开中的模式。这两种形式的差异之处是该 # 形式清除最短的匹配结果， 而该 ## 模式清除最长的匹配结果。
-
-```bash
-$ foo=file.txt.zip
-$ echo ${foo#*.}
-txt.zip
-$ echo ${foo##*.}
-zip
-```
-
-清除匹配的模式（从尾部开始）
-
-```bash
-${parameter%pattern}
-
-${parameter%%pattern}
-```
-
-这些展开和上面的 # 和 ## 展开一样，除了它们清除的文本从 parameter 所包含字符串的末尾开始，而不是开头。
-
-```bash
-$ foo=file.txt.zip
-$ echo ${foo%.*}
-file.txt
-$ echo ${foo%%.*}
-file
-```
-
-查找和替换
-
-```bash
-${parameter/pattern/string}
-
-${parameter//pattern/string}
-
-${parameter/#pattern/string}
-
-${parameter/%pattern/string}
-```
-
-这种形式的展开对 parameter 的内容执行查找和替换操作。如果找到了匹配通配符 pattern 的文本， 则用 string 的内容替换它。在正常形式下，只有第一个匹配项会被替换掉。在该 // 形式下，所有的匹配项都会被替换掉。 该 /# 要求匹配项出现在字符串的开头，而 /% 要求匹配项出现在字符串的末尾。/string 可能会省略掉，这样会 导致删除匹配的文本。
+下面是一个例子。
 
 ```bash
 $ foo=JPG.JPG
