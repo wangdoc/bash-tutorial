@@ -28,6 +28,8 @@ fi
 
 上面的例子中，判断条件是环境变量`$USER`是否等于`foo`，如果等于就输出`Hello foo.`，否则输出其他内容。
 
+`if`和`then`如果写在同一行，它们之间需要分号分隔。分号是 Bash 的命令分隔符。但是，`if`和`then`也可以写成两行，这时它们之间不需要使用分号。
+
 ```bash
 if true
 then
@@ -159,7 +161,7 @@ fi
 - `[ file1 -ot file2 ]`：如果 FILE1 比 FILE2 的更新时间更旧，或者 FILE2 存在而 FILE1 不存在，则为`true`。
 - `[ FILE1 -ef FILE2 ]`：如果 FILE1 和 FILE2 引用相同的设备和 inode 编号，则为`true`。
 
-下面的例子用来测试文件的类型。
+下面的例子用来测试文件的属性。
 
 ```bash
 #!/bin/bash
@@ -194,14 +196,14 @@ exit
 
 以下表达式用来判断字符串。
 
-- `[ string ]`：如果 string 不为 null，则为`true`。
-- `[ -n string ]`：如果 字符串 string 的长度大于零，则为`true`。
-- `[ -z string ]`：如果 字符串 string 的长度为零，则为`true`。
-- `[ string1 = string2 ]`：如果 string1 和 string2 相同，则为`true`。
-- `[ string1 == string2 ]` 如果 string1 和 string2 相同，则为`true`。
-- `[ string1 != string2 ]`：如果 	string1 和 string2 不相同，则为`true`。
-- `[ string1 > string2 ]`：如果按照字典顺序 string1 排列在 string2 之后，则为`true`。
-- `[ string1 < string2 ]`：如果按照字典顺序 string1 排列在 string2 之前，则为`true`。
+- `[ string ]`：如果`string`不为空（长度大于0），则判断为真。
+- `[ -n string ]`：如果字符串`string`的长度大于零，则判断为真。
+- `[ -z string ]`：如果字符串`string`的长度为零，则判断为真。
+- `[ string1 = string2 ]`：如果`string1`和`string2`相同，则判断为真。
+- `[ string1 == string2 ]` 等同于`[ string1 = string2 ]`。
+- `[ string1 != string2 ]`：如果`string1`和`string2`不相同，则判断为真。
+- `[ string1 > string2 ]`：如果按照字典顺序`string1`排列在`string2`之后，则判断为真。
+- `[ string1 < string2 ]`：如果按照字典顺序`string1`排列在`string2`之前，则判断为真。
 
 注意，`>`和`<`表达式操作符必须用引号引起来（或者是用反斜杠转义）， 当与`test`一块使用的时候。如果不这样，它们会被 shell 解释为重定向操作符。
 
@@ -228,16 +230,18 @@ fi
 
 上面代码中，我们首先确定`$ANSWER`字符串是否为空。如果为空，我们就终止脚本，并把退出状态设为零。注意这个应用于echo 命令的重定向操作。其把错误信息 “There is no answer.” 重定向到标准错误，这是处理错误信息的“合理”方法。如果字符串不为空，我们就计算 字符串的值，看看它是否等于“yes,” “no,” 或者“maybe”。为此使用了 elif，它是 “else if” 的简写。 通过使用 elif，我们能够构建更复杂的逻辑测试。
 
+注意，字符串判断时，变量要放在双引号之中，比如`[ -n "$COUNT" ]`，否则变量替换成字符串以后，`test`命令可能会报错，提示参数过多。另外，如果不放在双引号之中，变量为空时，命令会变成`[ -n ]`，这时会判断为真。如果放在双引号之中，`[ -n "" ]`就判断为伪。
+
 ### 整数表达式
 
 下面的表达式用于判断整数。
 
-- `[ integer1 -eq integer2 ]`：如果 integer1 等于 integer2，则为`true`。
-- `[ integer1 -ne integer2 ]`：如果 integer1 不等于 integer2，则为`true`。
-- `[ integer1 -le integer2 ]`：如果 integer1 小于或等于 integer2，则为`true`。
-- `[ integer1 -lt integer2 ]`：如果 integer1 小于 integer2，则为`true`。
-- `[ integer1 -ge integer2 ]`：如果 integer1 大于或等于 integer2，则为`true`。
-- `[ integer1 -gt integer2 ]`：如果 integer1 大于 integer2，则为`true`。
+- `[ integer1 -eq integer2 ]`：如果`integer1`等于`integer2`，则为`true`。
+- `[ integer1 -ne integer2 ]`：如果`integer1`不等于`integer2`，则为`true`。
+- `[ integer1 -le integer2 ]`：如果`integer1`小于或等于`integer2`，则为`true`。
+- `[ integer1 -lt integer2 ]`：如果`integer1`小于`integer2`，则为`true`。
+- `[ integer1 -ge integer2 ]`：如果`integer1`大于或等于`integer2`，则为`true`。
+- `[ integer1 -gt integer2 ]`：如果`integer1`大于`integer2`，则为`true`。
 
 下面是一个用法的例子。
 
@@ -380,6 +384,12 @@ fi
 
 上面例子中，`&&`用来连接两个判断条件：大于等于`$MIN_VAL`，并且小于等于`$MAX_VAL`。
 
+不过，更方便的写法是使用下一段介绍的控制运行符。
+
+```bash
+if [ condition ] && [ condition ]; then
+```
+
 使用否定操作符`!`时，最好用圆括号确定转义的范围。
 
 ```bash
@@ -420,6 +430,22 @@ $ [ -d temp ] || mkdir temp
 ```
 
 上面的命令中，如果`temp`目录不存在，脚本会终止，并且返回值为`1`。
+
+`if`结构也可以直接使用上面的控制操作符。
+
+```bash
+#! /bin/bash
+filename=$1
+word1=$2
+word2=$3
+
+if grep $word1 $filename && grep $word2 $filename
+then
+  echo "$word1 and $word2 are both in $filename."
+fi
+```
+
+上面的例子只有在指定文件里面，同时存在搜索词`word1`和`word2`，就会执行`if`的命令部分。
 
 ## case 结构
 
