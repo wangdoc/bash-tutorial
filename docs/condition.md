@@ -6,17 +6,17 @@
 
 ```bash
 if commands; then
-commands
+  commands
 [elif commands; then
-commands...]
+  commands...]
 [else
-commands]
+  commands]
 fi
 ```
 
 这个命令分成三个部分：`if`、`elif`和`else`。其中，后两个部分是可选的。
 
-`if`后面是判断的条件，如果不成立，并且存在`elif`部分，就会进行`elif`判断；如果还不成立，并且存在`else`部分，则会执行`else`代码块。
+`if`后面是主要的判断条件，`elif`用来添加在主条件不成立时的其他判断条件，`else`则是所有条件都不成立时要执行的部分。
 
 ```bash
 if test $USER = "foo"; then
@@ -26,7 +26,7 @@ else
 fi
 ```
 
-上面的例子中，`if test`判断环境变量`$USER`是否等于`foo`，如果等于就输出`Hello foo.`，否则输出其他内容。
+上面的例子中，判断条件是环境变量`$USER`是否等于`foo`，如果等于就输出`Hello foo.`，否则输出其他内容。
 
 ```bash
 if true
@@ -40,7 +40,7 @@ then
 fi
 ```
 
-上面的例子中，`true`和`false`是两个特殊命令，前者代表操作成功，后者代表操作失败。
+上面的例子中，`true`和`false`是两个特殊命令，前者代表操作成功，后者代表操作失败。第一个`if true`，意味着命令部分总是会执行；而第二个`if false`的命令部分，则总是不会执行。
 
 除了多行的写法，`if`结构也可以写成单行。
 
@@ -51,7 +51,7 @@ hello world
 $ if false; then echo "It's true."; fi
 ```
 
-注意，`if`后面可以是一个值，也可以是一条命令，判断命令运行的结果。
+注意，`if`后面也可以是一条命令，该条命令执行成功（返回值`0`），就意味着判断条件成立。
 
 ```bash
 $ if echo 'hi'; then echo 'hello world'; fi
@@ -66,29 +66,9 @@ hello world
 ```bash
 $ if false; true; then echo 'hello world'; fi
 hello world
-$ if true; false; then echo 'hello world'; fi
-$
 ```
 
-上面代码中，`then`的部分是否执行，完全取决于`if`部分的最后一个命令。
-
-`if`结构写成下面两种形式，也是可以的。
-
-```bash
-# 形式一
-if [ -f .bash_profile ]
-then
-  echo ".bash_profile 文件存在"
-else
-  echo ".bash_profile 文件不存在"
-fi
-
-# 形式二
-if [ -f .bash_profile ]
-then echo ".bash_profile 文件存在"
-else echo ".bash_profile 文件不存在"
-fi
-```
+上面例子中，`if`后面有两条命令（`false;true;`），第二条命令（`true`）决定了`then`的部分是否会执行。
 
 `elif`语句可以有多条。
 
@@ -110,7 +90,7 @@ fi
 
 ## test 命令
 
-`if`结构往往与`test`命令一起使用，有三种形式。
+`if`结构的判断条件，一般使用`test`命令，有三种形式。
 
 ```bash
 # 写法一
@@ -123,11 +103,9 @@ test expression
 [[ expression ]]
 ```
 
-上面的`expression`是一个表达式，其执行结果是`true`或者是`false`。当表达式为真时，这个`test`命令返回的退出状态为0，当表达式为假时，`test`命令退出状态为1。
+上面的`expression`是一个表达式，其执行结果是`true`或者是`false`。当表达式为真时，这个`test`命令的返回值为`0`，当表达式为假时，`test`命令的返回值为`1`。
 
-注意，第二种和第三种写法，`[`和`]`与内部的表达式之间都必须有空格。
-
-写法三比前两种写法多出一个功能，就是支持正则判断，详见后文。
+注意，第二种和第三种写法，`[`和`]`与内部的表达式之间都必须有空格。写法三比前两种写法多出一个功能，就是支持正则判断，详见后文。
 
 下面是三种写法的例子，判断一个文件是否存在。
 
@@ -143,7 +121,7 @@ if [ -e /tmp/foo.txt ] ; then
 fi
 
 # 写法三
-if [ -e /tmp/foo.txt ] ; then
+if [[ -e /tmp/foo.txt ]] ; then
   echo "Found foo.txt"
 fi
 ```
@@ -151,11 +129,6 @@ fi
 ## 判断表达式
 
 `if`结构常用的判断表达式有以下这些。
-
-```bash
-statement1 && statement2  # 两个语句都为 true
-statement1 || statement2  # 至少一个语句为 true
-```
 
 ### 文件表达式
 
@@ -186,7 +159,7 @@ statement1 || statement2  # 至少一个语句为 true
 - `[ file1 -ot file2 ]`：如果 FILE1 比 FILE2 的更新时间更旧，或者 FILE2 存在而 FILE1 不存在，则为`true`。
 - `[ FILE1 -ef FILE2 ]`：如果 FILE1 和 FILE2 引用相同的设备和 inode 编号，则为`true`。
 
-下面的脚本用来测试文件状态。
+下面的例子用来测试文件的类型。
 
 ```bash
 #!/bin/bash
@@ -219,7 +192,7 @@ exit
 
 ### 字符串表达式
 
-以下表达式用来计算字符串。
+以下表达式用来判断字符串。
 
 - `[ string ]`：如果 string 不为 null，则为`true`。
 - `[ -n string ]`：如果 字符串 string 的长度大于零，则为`true`。
@@ -255,9 +228,9 @@ fi
 
 上面代码中，我们首先确定`$ANSWER`字符串是否为空。如果为空，我们就终止脚本，并把退出状态设为零。注意这个应用于echo 命令的重定向操作。其把错误信息 “There is no answer.” 重定向到标准错误，这是处理错误信息的“合理”方法。如果字符串不为空，我们就计算 字符串的值，看看它是否等于“yes,” “no,” 或者“maybe”。为此使用了 elif，它是 “else if” 的简写。 通过使用 elif，我们能够构建更复杂的逻辑测试。
 
-### 整型表达式
+### 整数表达式
 
-下面的表达式用于整数。
+下面的表达式用于判断整数。
 
 - `[ integer1 -eq integer2 ]`：如果 integer1 等于 integer2，则为`true`。
 - `[ integer1 -ne integer2 ]`：如果 integer1 不等于 integer2，则为`true`。
@@ -296,10 +269,10 @@ fi
 
 ### 正则表达式
 
-`[[ expression ]]`这种判断形式，类似于 test 命令（支持所有的表达式），但是还支持正则表达式。
+`[[ expression ]]`这种判断形式，支持正则表达式。
 
 ```bash
-string1 =~ regex
+[[ string1 =~ regex ]]
 ```
 
 下面是一个例子。
@@ -331,19 +304,11 @@ fi
 
 上面代码中，先判断一个变量是否为正数或负数，如果是的话，再进行进一步判断。
 
-下面是进行文件类型判断的例子。
-
-```bash
-$ FILE=foo.bar
-$ if [[ $FILE == foo.* ]]; then
-> echo "$FILE matches pattern 'foo.*'"
-> fi
-foo.bar matches pattern 'foo.*'
-```
+除了支持正则表达式，`[[ ... ]]`与`[ ... ]`完全一样。
 
 ### 算术表达式
 
-除了`[[ ]]`复合命令之外，bash 也提供了`(( ))`，用来执行算术真测试。如果算术计算的结果是非零值，则一个算术真测试值为真。
+Bash 还提供了`((...))`，用来执行算术测试。如果算术计算的结果是非零值，则表示判断成立。
 
 ```bash
 $ if ((1)); then echo "It is true."; fi
@@ -352,22 +317,24 @@ $ if ((0)); then echo "It is true."; fi
 $
 ```
 
-下面是改造过的数值判断的脚本。
+上面例子中，`((1))`表示判断成立，`((0))`表示判断不成立。
+
+下面是用算术表达式改写的数值判断脚本。
 
 ```bash
 #!/bin/bash
 # test-integer2a: evaluate the value of an integer.
 INT=-5
 if [[ "$INT" =~ ^-?[0-9]+$ ]]; then
-    if ((INT == 0)); then
+    if (($INT == 0)); then
         echo "INT is zero."
     else
-        if ((INT < 0)); then
+        if (($INT < 0)); then
             echo "INT is negative."
         else
             echo "INT is positive."
         fi
-        if (( ((INT % 2)) == 0)); then
+        if (( (($INT % 2)) == 0)); then
             echo "INT is even."
         else
             echo "INT is odd."
@@ -379,29 +346,28 @@ else
 fi
 ```
 
-注意，`(( ))`只处理整数。
+注意，`(( ))`只处理整数。并且其中的变量
 
 ### 表达式的结合
 
-通过逻辑操作符，可以把表达式结合起来创建更复杂的计算。三个逻辑操作是 AND，OR，和 NOT。`test`和`[[ ]]`使用不同的操作符来表示这些操作。
+通过逻辑操作符，可以把表达式结合起来，创建更复杂的逻辑判断。三个逻辑操作是`AND`，`OR`，和`NOT`，它们都有自己的专用符号。
 
-|操作符|测试|`[[ ]]` and `(( ))`|
-|------|----|-------------------|
-|AND|`-a`|`&&`|
-|OR|`-o`|`||`|
-|NOT|`!`|`!`|
+- `AND`运算：符号`&&`，也可使用参数`-a`。
+- `OR`运算：符号`||`，也可使用参数`-o`。
+- `NOT`运算：符号`!`。
 
-下面是一个AND操作的例子。
+下面是一个`AND`操作的例子，判断整数是否在某个范围之内。
 
 ```bash
 #!/bin/bash
-# test-integer3: determine if an integer is within a
-# specified range of values.
+
 MIN_VAL=1
 MAX_VAL=100
+
 INT=50
+
 if [[ "$INT" =~ ^-?[0-9]+$ ]]; then
-    if [[ INT -ge MIN_VAL && INT -le MAX_VAL ]]; then
+    if [[ $INT -ge $MIN_VAL && $INT -le $MAX_VAL ]]; then
         echo "$INT is within $MIN_VAL to $MAX_VAL."
     else
         echo "$INT is out of range."
@@ -411,6 +377,8 @@ else
     exit 1
 fi
 ```
+
+上面例子中，`&&`用来连接两个判断条件：大于等于`$MIN_VAL`，并且小于等于`$MAX_VAL`。
 
 使用否定操作符`!`时，最好用圆括号确定转义的范围。
 
@@ -422,38 +390,36 @@ else
 fi
 ```
 
-因为 test 使用的所有的表达式和操作符都被 shell 看作是命令参数， 对于 bash 有特殊含义的字符，比如说 `<`，`>`，`(`，和 `)`，（圆括号解释为子 Shell 环境）必须引起来或者是转义。
+上面例子中，`test`命令使用的特殊字符（`<`，`>`，`(`，和 `)`等），必须引用或者转义，否则会被 Bash 解释。
 
 ### 控制操作符
 
-bash 支持两种可以执行分支任务的控制操作符。这个`&&`（AND）和`||`（OR）操作符作用如同 复合命令`[[ ]]`中的逻辑操作符。
+Bash 支持两种命令的控制操作符`&&`（AND）和`||`（OR），作用与`[[ ... ]]`中的逻辑操作符相同。
 
 ```bash
-command1 && command2
-
-command1 || command2
+$ command1 && command2
+$ command1 || command2
 ```
 
-对于`&&`操作符，先执行 command1，如果并且只有如果 command1 执行成功后， 才会执行 command2。对于`||`操作符，先执行 command1，如果并且只有如果 command1 执行失败后， 才会执行 command2。
+对于`&&`操作符，先执行`command1`，只有`command1`执行成功后， 才会执行`command2`。对于`||`操作符，先执行`command1`，只有`command1`执行失败后， 才会执行`command2`。
 
 ```bash
 $ mkdir temp && cd temp
 ```
 
-上面的命令会创建一个名为 temp 的目录，并且若它执行成功后，当前目录会更改为 temp。第二个命令会尝试 执行只有当 mkdir 命令执行成功之后。
+上面的命令会创建一个名为`temp`的目录，执行成功后，才会执行第二个命令，进入这个目录。
 
 ```bash
 $ [ -d temp ] || mkdir temp
 ```
 
-上面的命令会测试目录 temp 是否存在，并且只有测试失败之后，才会创建这个目录。这种构造类型非常有助于在脚本中处理错误。
+上面的命令会测试目录`temp`是否存在，如果不存在，就会执行第二个命令，创建这个目录。这种写法非常有助于在脚本中处理错误。
 
 ```bash
 [ -d temp ] || exit 1
 ```
 
-上面的命令中，如果`temp`目录不存在，脚本会终止，并返回退出状态1。
-
+上面的命令中，如果`temp`目录不存在，脚本会终止，并且返回值为`1`。
 
 ## case 结构
 
