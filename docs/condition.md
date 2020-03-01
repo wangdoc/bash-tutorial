@@ -449,14 +449,14 @@ fi
 
 ## case 结构
 
-`case`结构用于表达式有多个值时的判断。它类似包含多个`elif`的`if`结构，但是语义更好。它的语法如下。
+`case`结构用于表达式有多个值时的判断，可以为每个值指定对应的命令。它类似于包含多个`elif`的`if`结构，但是语义更好。它的语法如下。
 
 ```bash
 case expression in
   pattern )
-    statements ;;
+    commands ;;
   pattern )
-    statements ;;
+    commands ;;
   ...
 esac
 ```

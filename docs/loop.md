@@ -14,8 +14,13 @@ done
 
 上面代码中，只要满足条件`condition`，就会执行命令`statements`。然后，再次判断是否满足条件`condition`，只要满足，就会一直执行下去。只有不满足条件，才会退出循环。
 
+判断条件`condition`可以使用`test`命令，跟`if`语句的判断一致。
+
+关键字`do`可以跟`while`不在同一行，这时两者之间不需要使用分号分隔。
+
 ```bash
-while true; do
+while true
+do
   echo 'Hi, while looping ...';
 done
 ```
@@ -41,7 +46,6 @@ done
 ```
 
 上面例子中，只要变量`number`小于10，就会不断加1，直到`number`等于10，然后退出循环。
-
 
 `while`的条件部分也可以是执行一个命令。
 
@@ -69,7 +73,18 @@ Bash 提供了两个内部命令，用来在循环内部控制程序流程。`br
 
 ```bash
 until condition; do
-  statements
+  commands
+done
+```
+
+判断条件`condition`可以使用`test`命令，跟`if`语句的判断一致。
+
+关键字`do`可以与`until`不写在同一行，这时两者之间不需要分号分隔。
+
+```bash
+until condition
+do
+  commands
 done
 ```
 
@@ -97,17 +112,50 @@ done
 
 上面例子中，只要变量`number`小于10，就会不断加1，直到`number`大于等于10，就退出循环。
 
+`until`的条件部分也可以是一个命令，表示在这个命令执行成功之前，不断重复尝试。
+
+```bash
+until cp $1 $2; do
+  echo 'Attempt to copy failed. waiting...'
+  sleep 5
+done
+```
+
+上面例子表示，只要`cp $1 $2`这个命令执行不成功，就5分钟后再尝试一次，直到成功为止。
+
+`until`循环都可以转为`while`循环，只要把条件设为否定即可。上面这个例子可以改写如下。
+
+```bash
+while ! cp $1 $2; do
+  echo 'Attempt to copy failed. waiting...'
+  sleep 5
+done
+```
+
+一般来说，`until`用得比较少，完全可以统一都使用`while`。
+
 ## for...in 循环
 
 `for...in`循环用于遍历列表的每一项。
 
 ```bash
-for variable in words; do
+for variable in list
+do
   commands
 done
 ```
 
-上面命令中，`words`是一个列表，变量`variable`依次等于列表中的每一项，执行执行的命令`commands`。
+上面语法中，`for`循环会依次从`list`列表中取出一项，作为变量`variable`，然后在循环体中进行处理。
+
+关键词`do`可以跟`for`写在同一行，两者使用分号分隔。
+
+```bash
+for variable in list; do
+  commands
+done
+```
+
+下面是一个例子。
 
 ```bash
 #!/bin/bash
@@ -119,7 +167,7 @@ done
 
 上面例子中，`word1 word2 word3`是一个包含三个单词的列表，变量`i`依次等于`word1`、`word2`、`word3`，命令`echo $i`则会相应地执行三次。
 
-下面是通过通配符产生列表的例子。
+列表可以由通配符产生。
 
 ```bash
 for i in *.png; do
@@ -142,6 +190,14 @@ done
 ```
 
 上面例子中，`cat ~/.bash_profile`命令会输出`~/.bash_profile`文件的内容，然后通过遍历每一个词，计算该文件一共包含多少个词，以及每个词有多少个字符。
+
+`in list`的部分可以省略，这时`list`默认等于脚本的所有参数`$@`。但是，为了可读性，最好还是不要省略，参考下面的例子。
+
+```bash
+for filename in "$@" ; do
+  echo "$filename"
+done
+```
 
 ## for 循环
 
@@ -175,3 +231,62 @@ done
 
 上面代码中，初始化变量`i`的值为0，循环执行的条件是`i`小于5。每次循环迭代结束时，`i`的值加1。
 
+## select 结构
+
+`select`结构主要用来生成简单的菜单。它的语法与`for...in`循环基本一致。
+
+```bash
+select name
+[in list]
+do
+  commands
+done
+```
+
+Bash 会对`select`依次进行下面的处理。
+
+1. `select`生成一个菜单，内容是列表`list`的每一项，并且每一项前面还有一个数字编号。
+1. Bash 提示用户选择一项，输入它的编号。
+1. 用户输入以后，Bash 会将该项的内容存在变量`name`，该项的编号存入环境变量`REPLY`。如果用户没有输入，就按回车键，Bash 会重新输出菜单，让用户选择。
+1. 执行命令体`commands`。
+1. 执行结束后，回到第一步，重复这个过程。
+
+下面是一个例子。
+
+```bash
+select brand in Samsung Sony iphone symphony Walton
+do
+  echo "You have chosen $brand"
+done
+```
+
+上面例子中，Bash 会让用户选择一个列出的品牌，然后将其打印出来。并且不断重复这个过程，直到用户按下`Ctrl + c`，退出执行。
+
+`select`可以与`case`结合，针对不同项，执行不同的命令。
+
+```bash
+#!/bin/bash
+echo "Which Operating System do you like?"
+
+select os in Ubuntu LinuxMint Windows8 Windows7 WindowsXP
+do
+  case $os in
+    "Ubuntu"|"LinuxMint")
+      echo "I also use $os."
+    ;;
+    "Windows8" | "Windows10" | "WindowsXP")
+      echo "Why don't you try Linux?"
+    ;;
+    *)
+      echo "Invalid entry."
+      break
+    ;;
+  esac
+done
+```
+
+上面例子中，`case`针对用户选择的不同项，执行不同的命令。
+
+## 参考链接
+
+- [Bash Select Command](https://linuxhint.com/bash_select_command/), Fahmida Yesmin
