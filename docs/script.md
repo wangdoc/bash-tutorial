@@ -38,14 +38,7 @@ $ /bin/sh ./script.sh
 $ bash ./script.sh
 ```
 
-## 执行权限和路径fn () {
-  local foo
-  foo=1
-  echo "fn: foo = $foo"
-}
-
-fn
-echo "global: foo = $foo"
+## 执行权限和路径
 
 前面说过，通过 Shebang 行指定解释器的脚本，可以直接执行。这有一个前提条件，就是脚本需要有执行权限。可以使用下面的命令，赋予脚本执行权限。
 
@@ -161,6 +154,8 @@ $ script.sh word1 word2 word3
 
 如果脚本的参数多于9个，那么第10个参数可以用`${10}`的形式引用，以此类推。
 
+注意，如果命令是`command -o foo bar`，那么`-o`是`$1`，`foo`是`$2`，`bar`是`$3`。
+
 下面是一个脚本内部读取命令行参数的例子。
 
 ```bash
@@ -198,6 +193,10 @@ done
 
 上面例子中，`$@`返回一个全部参数的列表，然后使用`for`循环遍历。
 
+## shift 命令
+
+`shift`命令可以改变脚本参数，每次执行都会移除脚本当前的第一个参数（`$1`），使得后面的参数向前一位，即`$2`变成`$1`、`$3`变成`$2`、`$4`变成`$3`，以此类推。
+
 `while`循环结合`shift`命令，也可以读取每一个参数。
 
 ```bash
@@ -206,13 +205,61 @@ done
 echo "一共输入了 $# 个参数"
 
 while [ "$1" != "" ]; do
-    echo "剩下 $# 个参数"
-    echo "参数：$1"
-    shift
+  echo "剩下 $# 个参数"
+  echo "参数：$1"
+  shift
 done
 ```
 
-上面例子中，`shift`命令的作用是移除当前第一个参数，即`$2`变成`$1`、`$3`变成`$2`、`$4`变成`$3`，以此类推。
+上面例子中，`shift`命令每次移除当前第一个参数，从而通过`while`循环遍历所有参数。
+
+`shift`命令可以接受一个整数作为参数，指定所要移除的参数个数，默认为`1`。
+
+```bash
+shift 3
+```
+
+上面的命令移除前三个参数，原来的`$4`变成`$1`。
+
+## getopts 命令
+
+`getopts`命令用来解析复杂的命令行参数，通常与`while`循环一起使用，取出所有的带有前置连词线（`-`）的参数。
+
+它带有两个参数。第一个参数是字符串，给出所有的连词线参数。如果该参数带有参数值，则后面必须带有一个冒号（`:`）。比如，某个命令可以有三个参数`-l`、`-h`、`-a`，其中只有`-a`可以带有参数值，那么`getopts`的第一个参数写成`lha:`，顺序不重要，注意`a`后面有一个冒号。`getopts`的第二个参数是一个变量名，用来保存参数。
+
+下面是一个例子。
+
+```bash
+while getopts 'lha:' OPTION; do
+  case "$OPTION" in
+    l)
+      echo "linuxconfig"
+      ;;
+
+    h)
+      echo "h stands for h"
+      ;;
+
+    a)
+      avalue="$OPTARG"
+      echo "The value provided is $OPTARG"
+      ;;
+    ?)
+      echo "script usage: $(basename $0) [-l] [-h] [-a somevalue]" >&2
+      exit 1
+      ;;
+  esac
+done
+shift "$(($OPTIND - 1))"
+```
+
+上面例子中，`while`循环不断执行`getopts 'lha:' OPTION`命令，每次执行就会读取一个连词线参数（以及对应的参数值），然后进入循环体。变量`OPTION`保存的是，当前处理的那一个连词线参数（即`l`、`h`或`a`）。如果用户输入了没有指定的参数（比如`-x`），那么`OPTION`等于`?`。循环体内使用`case`判断，处理这四种不同的情况。
+
+如果某个连词线参数带有参数值，比如`-a foo`，那么处理`a`参数的时候，变量`$OPTARG`保存的就是参数值。
+
+注意，只要遇到不带连词线的参数，`getopts`就会执行失败，从而退出`while`循环。比如，`getopts`可以解析`command -l foo`，但不可以解析`command foo -l`。另外，多个连词线参数写在一起的形式，比如`command -lh`，`getopts`也可以正确处理。
+
+变量`$OPTIND`在`getopts`开始执行前是`1`，然后每次执行就会加`1`。等到退出`while`循环，就意味着连词线参数全部处理完毕。这时，`$OPTIND - 1`就是已经处理的连词线参数个数，使用`shift`命令将这些参数移除，保证后面的代码可以用`$1`、`$2`等处理命令的主参数。
 
 ## 别名
 
@@ -351,7 +398,7 @@ fi
 
 ## 命令执行结果
 
-命令执行结束后，会有一个返回值。`0`表示执行成功，非`0`（通常是`1`）表示执行失败。
+命令执行结束后，会有一个返回值。`0`表示执行成功，非`0`（通常是`1`）表示执行失败。环境变量`$?`可以读取前一个命令的返回值。
 
 利用这一点，可以在脚本中对命令执行结果进行判断。
 
@@ -387,4 +434,8 @@ cd $some_directory && rm *
 # 第一步执行失败，才会执行第二步
 cd $some_directory || exit 1
 ```
+
+## 参考链接
+
+- [How to use getopts to parse a script options](https://linuxconfig.org/how-to-use-getopts-to-parse-a-script-options), Egidio Docile
 
