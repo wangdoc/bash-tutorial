@@ -310,9 +310,9 @@ fi
 
 除了支持正则表达式，`[[ ... ]]`与`[ ... ]`完全一样。
 
-### 算术表达式
+### 算术条件
 
-Bash 还提供了`((...))`，用来执行算术测试。如果算术计算的结果是非零值，则表示判断成立。
+Bash 还提供了`((...))`作为算术条件。如果算术计算的结果是非零值，则表示判断成立。
 
 ```bash
 $ if ((1)); then echo "It is true."; fi
@@ -323,22 +323,22 @@ $
 
 上面例子中，`((1))`表示判断成立，`((0))`表示判断不成立。
 
-下面是用算术表达式改写的数值判断脚本。
+下面是用算术条件改写的数值判断脚本。
 
 ```bash
 #!/bin/bash
 # test-integer2a: evaluate the value of an integer.
 INT=-5
 if [[ "$INT" =~ ^-?[0-9]+$ ]]; then
-    if (($INT == 0)); then
+    if ((INT == 0)); then
         echo "INT is zero."
     else
-        if (($INT < 0)); then
+        if ((INT < 0)); then
             echo "INT is negative."
         else
             echo "INT is positive."
         fi
-        if (( (($INT % 2)) == 0)); then
+        if (( ((INT % 2)) == 0)); then
             echo "INT is even."
         else
             echo "INT is odd."
@@ -350,7 +350,7 @@ else
 fi
 ```
 
-注意，`(( ))`只处理整数。并且其中的变量
+只要是算术表达式，都能用于`((...))`语法，详见《Bash 的算术运算》一章。
 
 ### 表达式的结合
 
