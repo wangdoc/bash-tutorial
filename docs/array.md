@@ -42,6 +42,28 @@ $ days=(Sun Mon Tue Wed Thu Fri Sat)
 $ days=([0]=Sun [1]=Mon [2]=Tue [3]=Wed [4]=Thu [5]=Fri [6]=Sat)
 ```
 
+只为某些值指定位置，也是可以的。
+
+```bash
+names=(hatter [5]=duchess alice)
+```
+
+上面例子中，`hatter`是数组的0号位置，`duchess`是5号位置，`alice`是6号位置。
+
+没有赋值的数组元素是不存在的，默认值是空字符串。
+
+在数组末尾附加数据，可以使用`+=`赋值运算符，能够自动地把值附加到数组末尾。否则，还需要知道数组的最大位置，这就比较麻烦。
+
+```bash
+$ foo=(a b c)
+$ echo ${foo[@]}
+a b c
+
+$ foo+=(d e f)
+$ echo ${foo[@]}
+a b c d e f
+```
+
 ## 读取数组
 
 读取数组指定位置的成员，要使用下面的语法。
@@ -64,42 +86,46 @@ a[0]
 
 上面例子中，数组的第一个元素是`a`。如果不加大括号，Bash 会直接读取`$array`的值，然后将`[0]`按照原样输出。
 
-如果读取数组成员时，没有读取指定哪一个位置的成员，默认使用`0`号位置。
+`@`和`*`是数组的特殊索引，表示返回数组的所有成员。
 
 ```bash
 $ foo=(a b c d e f)
 $ echo ${foo[@]}
 a b c d e f
-$ foo=A
-$ echo ${foo[@]}
-A b c d e f
 ```
 
-上面例子中，`foo`是一个数组，直接赋值的话，实际上是给`foo[0]`赋值。
+`for`循环可以遍历数组。
 
 ```bash
-$ ARRAY=(one two three)
-
-$ echo ${ARRAY[2]}
-three
-
-$ echo ${ARRAY[*]}
-one two three
-
-$ echo $ARRAY[*]
-one[*]
-
-$ ARRAY[3]=four
-
-$ echo ${ARRAY[*]}
-one two three four
+for i in "${names[@]}"; do
+  echo $i
+done
 ```
 
-上面例子中，`${ARRAY[*]}`可以扩展成数组的所有成员。然后，为数组添加成员也是使用`ARRAYNAME[indexnumber]=value`的语法。
+如果读取数组成员时，没有读取指定哪一个位置的成员，默认使用`0`号位置。
 
-任何引用一个不带下标的数组变量，则指的是数组元素0：
+```bash
+$ foo=(a b c d e f)
+$ foo=A
+$ echo ${foo[0]}
+A
+```
 
-要想发现数组一共包含多少成员，使用下面的语法，两种写法都可以。
+上面例子中，`foo`是一个数组，赋值的时候不指定位置，实际上是给`foo[0]`赋值。
+
+引用一个不带下标的数组变量，则指的是`0`号位置的数组元素。
+
+```bash
+$ foo=(a b c d e f)
+$ echo ${foo}
+a
+$ echo $foo
+a
+```
+
+上面例子中，引用数组元素的时候，没有指定位置，结果返回的是`0`号位置。
+
+要想直到数组一共包含多少成员，可以使用下面两种语法。
 
 ```bash
 ${#array[*]}
@@ -118,76 +144,28 @@ $ echo ${#a[@]}
 1
 ```
 
-上面例子中，尽管我们把字符串赋值给数组元素100， Bash 仅仅报告数组中有一个元素。
+上面例子中，把字符串赋值给`100`位置的数组元素，这时的数组只有一个元素。
 
-## 数组操作
-
-位置参数可以用`*`和`@`表示，它们会扩展成数组的每一个元素。
+`${!array[@]}`或`${!array[*]}`，可以返回数组的哪些位置是有值的。
 
 ```bash
-$ animals=("a dog" "a cat" "a fish")
-
-$ for i in ${animals[*]}; do echo $i; done
-a
-dog
-a
-cat
-a
-fish
-
-$ for i in ${animals[@]}; do echo $i; done
-a
-dog
-a
-cat
-a
-fish
+$ arr=([5]=a [9]=b [23]=c)
+$ echo ${!arr[@]}
+5 9 23
+$ echo ${!arr[@*]}
+5 9 23
 ```
 
-上面例子中，`${animals[*]`和`${animals[@]}`会扩展成数组的所有成员`a dog a cat a fish`。
+上面例子中，数组的5、9、23号位置有值。
+
+利用这个语法，也可以通过`for`循环遍历数组。
 
 ```bash
-$ for i in "${animals[*]}"; do echo $i; done
-a dog a cat a fish
+arr=(a b c d)
 
-$ for i in "${animals[@]}"; do echo $i; done
-a dog
-a cat
-a fish
-```
-
-因为 bash 允许赋值的数组下标包含 “间隔”，有时候确定哪个元素真正存在是很有用的。为做到这一点， 可以使用以下形式的参数展开。
-
-```bash
-${!array[*]}
-
-${!array[@]}
-```
-
-上面语法中，`array`是一个数组变量的名字。和其它使用符号 * 和 @ 的展开一样，用引号引起来的 @ 格式是最有用的， 因为它能展开成分离的词。
-
-```bash
-$ foo=([2]=a [4]=b [6]=c)
-
-$ for i in "${foo[@]}"; do echo $i; done
-a
-b
-c
-$ for i in "${!foo[@]}"; do echo $i; done
-2
-4
-6
-```
-
-如果我们需要在数组末尾附加数据，那么知道数组中元素的个数是没用的，因为通过 * 和 @ 表示法返回的数值不能 告诉我们使用的最大数组索引。幸运地是，shell 为我们提供了一种解决方案。通过使用 += 赋值运算符， 我们能够自动地把值附加到数组末尾。这里，我们把三个值赋给数组 foo，然后附加另外三个。
-
-```bash
-$ foo=(a b c)
-$ echo ${foo[@]}
-a b c
-$ foo+=(d e f)
-$ echo ${foo[@]}
-a b c d e f
+for i in ${!arr[@]};do
+  echo ${arr[i]}
+done
 ```
 
 ## 删除数组
@@ -226,7 +204,9 @@ $ echo ${ARRAY[*]}
 
 ## 关联数组
 
-现在最新的 bash 版本支持关联数组了。关联数组使用字符串而不是整数作为数组索引。 这种功能给出了一种有趣的新方法来管理数据。
+Bash 的新版本支持关联数组。关联数组使用字符串而不是整数作为数组索引。
+
+`declare -A`可以声明关联数组。
 
 ```bash
 declare -A colors
@@ -242,3 +222,4 @@ colors["blue"]="#0000ff"
 ```bash
 echo ${colors["blue"]}
 ```
+
