@@ -19,6 +19,7 @@ $ printenv
 - `EDITOR`：文本编辑器的名字。
 - `HOME`：用户的主目录。
 - `HOST`：当前主机的名称。
+- `IFS`：词与词之间的分隔符，默认为空格。
 - `LANG`：字符集以及语言编码，比如`zh_CN.UTF-8`。
 - `PATH`：由冒号分开的目录列表，当输入可执行程序名后，会搜索这个目录列表。
 - `PS1`：Shell 提示符。
@@ -41,8 +42,7 @@ $ echo $PATH
 ```
 
 注意，`printenv`命令后面的变量名，不用加前缀`$`。
-$ readonly TUX=penguinpower
-$ TUX=Mickeysoft
+
 ## 局部变量
 
 局部变量是仅在当前 Shell 可用的变量，一旦退出，就不存在了。

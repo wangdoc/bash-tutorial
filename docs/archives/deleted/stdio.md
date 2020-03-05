@@ -38,6 +38,15 @@ echo "<HTML>
 </HTML>"
 ```
 
+echo '<HTML>
+    <HEAD>
+          <TITLE>Page Title</TITLE>
+    </HEAD>
+    <BODY>
+          Page body.
+    </BODY>
+</HTML>'
+
 ## read
 
 `read`命令被用来从标准输入读取单行数据。这个命令可以用来读取键盘输入，当使用重定向的时候，读取文件中的一行数据。

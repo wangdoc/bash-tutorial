@@ -4,15 +4,33 @@
 
 ## echo 命令
 
-`echo`命令的作用是输出一行文本，可以将该命令的参数原样输出。
+由于后面的例子会大量用到`echo`命令，这里先介绍这个命令。
+
+`echo`命令的作用是在屏幕输出一行文本，可以将该命令的参数原样输出。
 
 ```bash
 $ echo hello world
 hello world
-$
 ```
 
+上面例子中，`echo`的参数是`hello world`，可以原样输出。
+
 默认情况下，`echo`输出的文本末尾会有一个回车符。
+
+如果引号里面的文本包括换行，`echo`命令也能原样输出。
+
+```bash
+$ echo "<HTML>
+    <HEAD>
+          <TITLE>Page Title</TITLE>
+    </HEAD>
+    <BODY>
+          Page body.
+    </BODY>
+</HTML>"
+```
+
+上面例子中，`echo`可以原样输出多行文本。
 
 （1）`-n`参数
 
