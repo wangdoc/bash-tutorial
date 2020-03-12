@@ -344,7 +344,7 @@ done
 
 ## 变量扩展
 
-Bash 将美元符号`$`开头的词元视为变量，将其扩展成变量值。
+Bash 将美元符号`$`开头的词元视为变量，将其扩展成变量值，详见《Bash 变量》一章。
 
 ```bash
 $ echo $SHELL
@@ -366,19 +366,6 @@ SECONDS SHELL SHELLOPTS SHLVL SSH_AGENT_PID SSH_AUTH_SOCK
 ```
 
 上面例子中，`${!S*}`扩展成所有以`S`开头的变量名。
-
-`${VAR:=value}`可以设置变量的默认值，即如果变量名有对应的值，就返回该值，否则创建变量，并将其设为默认值。
-
-```bash
-$ f1=bar
-$ echo ${f1:=baz}
-bar
-
-$ echo ${f2:=baz}
-baz
-```
-
-上面例子中，变量`$f1`有值`bar`，则返回`bar`；变量`$f2`不存在，则创建该变量，并将设为默认值`baz`。
 
 ## 子命令扩展
 

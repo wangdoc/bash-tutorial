@@ -263,10 +263,11 @@ script.sh:行4: foo: 未找到命令
 
 `set`命令还有一些其他参数。
 
+- `set -n`：等同于`set -o noexec`，不运行命令，只检查语法是否正确。
 - `set -f`：等同于`set -o noglob`，表示不对通配符进行文件名扩展。
 - `set -v`：等同于`set -o verbose`，表示打印 Shell 接收到的每一行输入。
 
-上面两个参数，可以分别使用`set +f`、`set +v`关闭。
+上面的`-f`和`-v`参数，可以分别使用`set +f`、`set +v`关闭。
 
 Bash 默认采用 Emacs 模式进行行编辑，可以用下面的命令切换成 Vi 模式。
 

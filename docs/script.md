@@ -435,11 +435,35 @@ echo "REPLY = '$REPLY'"
 
 上面例子中，先显示`Enter one or more values >`，再接受用户的输入。
 
-**（3）其他参数**
+**（3）-a 参数**
 
-- `-a array`：把用户输入赋值到数组`array`中，从零号位置开始。
+`-a`参数把用户的输入赋值给一个数组，从零号位置开始。
+
+```bash
+$ read -a people
+alice duchess dodo
+$ echo ${people[2]}
+dodo
+```
+
+上面例子中，用户输入被赋值给一个数组`people`，这个数组的2号成员就是`dodo`。
+
+**（4）-n 参数**
+
+`-n`参数指定只读取若干个字符，作为变量值，而不是整行读取。
+
+```bash
+$ read -n 3 letter
+abcdefghij
+$ echo $letter
+abc
+```
+
+上面例子中，变量`letter`只包含3个字母。
+
+**（5）其他参数**
+
 - `-d delimiter`：定义字符串`delimiter`的第一个字符作为用户输入的结束，而不是一个换行符。
-- `-n num`：读取`num`个输入的字符，而不是读取整行。
 - `-r`：raw 模式，表示不把用户输入的反斜杠字符解释为转义字符。
 - `-s`：使得用户的输入不显示在屏幕上，这常常用于输入密码或保密信息。
 - `-u fd`：使用文件描述符`fd`作为输入。
