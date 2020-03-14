@@ -128,7 +128,7 @@ $ log_msg "This is sample log message"
 
 ## 返回值
 
-`return`命令用于从函数返回一个值。
+`return`命令用于从函数返回一个值。函数执行到这条命令，就不再往下执行了，直接返回了。
 
 ```bash
 function func_return_value {
@@ -142,6 +142,15 @@ function func_return_value {
 $ func_return_value
 $ echo "Value returned by function is: $?"
 Value returned by function is: 10
+```
+
+`return`后面不跟参数，只用于返回也是可以的。
+
+```bash
+function name {
+  commands
+  return
+}
 ```
 
 ## 全局变量和局部变量

@@ -407,6 +407,8 @@ Enter one or more values > a b c d
 REPLY = 'a b c d'
 ```
 
+`read`命令除了读取键盘输入，可以用来读取文件，详见下一节的例子。
+
 `read`命令的参数如下。
 
 **（1）-t 参数**
@@ -469,6 +471,61 @@ abc
 - `-r`：raw 模式，表示不把用户输入的反斜杠字符解释为转义字符。
 - `-s`：使得用户的输入不显示在屏幕上，这常常用于输入密码或保密信息。
 - `-u fd`：使用文件描述符`fd`作为输入。
+
+## IFS 变量
+
+`read`命令读取的值，默认是以空格分隔。可以通过自定义环境变量`IFS`（内部字段分隔符，Internal Field Separator 的缩写），修改分隔标志。
+
+`IFS`的默认值是空格、Tab 符号、换行符号，通常取第一个（即空格）。
+
+如果把`IFS`定义成冒号（`:`）或分号（`;`），就可以分隔以这两个符号分隔的值，这对读取文件很有用。
+
+```bash
+#!/bin/bash
+# read-ifs: read fields from a file
+
+FILE=/etc/passwd
+
+read -p "Enter a username > " user_name
+file_info="$(grep "^$user_name:" $FILE)"
+
+if [ -n "$file_info" ]; then
+  IFS=":" read user pw uid gid name home shell <<< "$file_info"
+  echo "User = '$user'"
+  echo "UID = '$uid'"
+  echo "GID = '$gid'"
+  echo "Full Name = '$name'"
+  echo "Home Dir. = '$home'"
+  echo "Shell = '$shell'"
+else
+  echo "No such user '$user_name'" >&2
+  exit 1
+fi
+```
+
+上面例子中，`IFS`设为冒号，然后用来分解`/etc/passwd`文件的一行。`IFS`的赋值命令和`read`命令写在一行，这样的话，`IFS`的改变仅对后面的命令生效，该命令执行后`IFS`会自动恢复原来的值。如果不写在一行，就要采用下面的写法。
+
+```bash
+OLD_IFS="$IFS"
+IFS=":"
+read user pw uid gid name home shell <<< "$file_info"
+IFS="$OLD_IFS"
+```
+
+另外，上面例子中，`<<<`是 Here 字符串，用于将变量值转为标准输入，因为`read`命令只能解析标准输入。
+
+如果`IFS`设为空字符串，就可以读取一行。
+
+```bash
+#!/bin/bash
+input="/path/to/txt/file"
+while IFS= read -r line
+do
+  echo "$line"
+done < "$input"
+```
+
+上面的命令可以逐行读取文件，每一行存入变量`line`，打印出来以后再读取下一行。
 
 ## 命令执行结果
 
