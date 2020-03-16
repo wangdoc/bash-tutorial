@@ -14,7 +14,19 @@ done
 
 上面代码中，只要满足条件`condition`，就会执行命令`statements`。然后，再次判断是否满足条件`condition`，只要满足，就会一直执行下去。只有不满足条件，才会退出循环。
 
-判断条件`condition`可以使用`test`命令，跟`if`语句的判断一致。
+循环条件`condition`可以使用`test`命令，跟`if`语句的判断条件一致。
+
+```bash
+#!/bin/bash
+
+number=0
+while [ "$number" -lt 10 ]; do
+  echo "Number = $number"
+  number=$((number + 1))
+done
+```
+
+上面例子中，只要变量`number`小于10，就会不断加1，直到`number`等于10，然后退出循环。
 
 关键字`do`可以跟`while`不在同一行，这时两者之间不需要使用分号分隔。
 
@@ -32,20 +44,6 @@ done
 ```bash
 $ while true; do echo 'Hi, while looping ...'; done
 ```
-
-下面是另一个例子
-
-```bash
-#!/bin/bash
-
-number=0
-while [ "$number" -lt 10 ]; do
-  echo "Number = $number"
-  number=$((number + 1))
-done
-```
-
-上面例子中，只要变量`number`小于10，就会不断加1，直到`number`等于10，然后退出循环。
 
 `while`的条件部分也可以是执行一个命令。
 
@@ -65,7 +63,11 @@ $ while true; false; do echo 'Hi, looping ...'; done
 
 ## break，continue
 
-Bash 提供了两个内部命令，用来在循环内部控制程序流程。`break`命令立即终止一个循环，且程序继续执行循环之后的语句。`continue`命令导致程序跳过循环中剩余的语句，且程序继续执行下一次循环。
+Bash 提供了两个内部命令，用来在循环内部跳出循环。
+
+`break`命令立即终止循环，程序继续执行循环之后的语句，即不再执行剩下的循环。
+
+`continue`命令立即终止本轮循环，开始执行下一轮循环。
 
 ## until 循环
 
@@ -194,6 +196,12 @@ done
 `in list`的部分可以省略，这时`list`默认等于脚本的所有参数`$@`。但是，为了可读性，最好还是不要省略，参考下面的例子。
 
 ```bash
+for filename; do
+  echo "$filename"
+done
+
+# 等同于
+
 for filename in "$@" ; do
   echo "$filename"
 done

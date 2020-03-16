@@ -412,10 +412,10 @@ $ [ -d temp ] || mkdir temp
 上面的命令会测试目录`temp`是否存在，如果不存在，就会执行第二个命令，创建这个目录。这种写法非常有助于在脚本中处理错误。
 
 ```bash
-[ -d temp ] || exit 1
+[ ! -d temp ] && exit 1
 ```
 
-上面的命令中，如果`temp`目录不存在，脚本会终止，并且返回值为`1`。
+上面的命令中，如果`temp`子目录不存在，脚本会终止，并且返回值为`1`。
 
 `if`结构也可以直接使用上面的控制操作符。
 
@@ -432,6 +432,27 @@ fi
 ```
 
 上面的例子只有在指定文件里面，同时存在搜索词`word1`和`word2`，就会执行`if`的命令部分。
+
+```bash
+[[ -d "$dir_name" ]] && cd "$dir_name" && rm *
+
+# 等同于
+
+if [[ ! -d "$dir_name" ]]; then
+  echo "No such directory: '$dir_name'" >&2
+  exit 1
+fi
+if ! cd "$dir_name"; then
+  echo "Cannot cd to '$dir_name'" >&2
+  exit 1
+fi
+if ! rm *; then
+  echo "File deletion failed. Check results" >&2
+  exit 1
+fi
+```
+
+上面例子中，将一个控制操作符号的语句，改写成`if`结构。
 
 ## case 结构
 
