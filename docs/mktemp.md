@@ -75,7 +75,7 @@ TMPFILE=$(mktemp) || exit 1
 echo "Our temp file is $TMPFILE"
 ```
 
-## 四、mktemp 命令的参数
+## mktemp 命令的参数
 
 `-d`参数可以创建一个临时目录。
 
