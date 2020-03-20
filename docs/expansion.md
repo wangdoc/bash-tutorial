@@ -1,10 +1,28 @@
 # Bash 的扩展模式
 
+## 简介
+
 Shell 接收到用户输入的命令以后，会根据空格将用户的输入，拆分成一个个词元（token）。然后，Shell 会扩展词元里面的特殊字符，扩展完成后才会调用相应的命令。
 
 这种特殊字符的扩展，称为通配符扩展（wildcard expansion）或者模式扩展（globbing）。Bash 一共提供八种扩展，先进行扩展，然后再执行命令。
 
 早期的 Unix 系统有一个`/etc/glob`文件，保存扩展的模板。后来 Bash 内置了这个功能，但是这个名字保留了下来。特殊字符的扩展早于正则表达式出现，可以看作是原始的正则表达式。它的功能没有正则那么强大灵活，但是优点是简单和方便。
+
+Bash 允许用户关闭通配符扩展。
+
+```bash
+$ set -o noglob
+# 或者
+$ set -f
+```
+
+下面的命令可以重新打开通配符扩展。
+
+```bash
+$ set +o noglob
+# 或者
+$ set +f
+```
 
 ## 波浪线扩展
 
@@ -147,6 +165,8 @@ aba bbb
 ```
 
 上面命令中，`[!a]`表示文件名第二个字符不是`a`的文件名。
+
+注意，如果需要匹配`[`字符，可以放在方括号内，比如`[[aeiou]`。如果需要匹配连字号`-`，只能放在方括号内部的开头或结尾，比如`[-aeiou]`或`[aeiou-]`。
 
 ## [start-end] 模式
 
@@ -402,9 +422,16 @@ $ echo $((2 + 2))
 
 - `[[:alnum:]]`：匹配任意英文字母与数字
 - `[[:alpha:]]`：匹配任意英文字母
-- `[[:digit:]]`：匹配任意数字
-- `[[:lower:]]`：匹配任意小写字母
-- `[[:upper:]]`：匹配任意大写字母
+- `[[:blank:]]`：空格和 Tab 键。
+- `[[:cntrl:]]`：ASCII 码 0-31 的不可打印字符。
+- `[[:digit:]]`：匹配任意数字 0-9。
+- `[[:graph:]]`：A-Z、a-z、0-9 和标点符号。
+- `[[:lower:]]`：匹配任意小写字母 a-z。
+- `[[:print:]]`：ASCII 码 32-127 的可打印字符。
+- `[[:punct:]]`：标点符号（除了 A-Z、a-z、0-9 的可打印字符）。
+- `[[:space:]]`：空格、Tab、LF（10）、VT（11）、FF（12）、CR（13）。
+- `[[:upper:]]`：匹配任意大写字母 A-Z。
+- `[[:xdigit:]]`：16进制字符（A-F、a-f、0-9）。
 
 请看下面的例子。
 
@@ -479,6 +506,151 @@ fo*
 ```
 
 上面代码创建了一个`fo*`文件，这时`*`就是文件名的一部分。
+
+## 量词语法
+
+量词语法用来控制模式匹配的次数。它需要在 Bash 的`extglob`参数打开的情况下，才能使用。不过，一般是默认打开的，可以用下面的命令查询。
+
+```bash
+$ shopt extglob
+extglob        	on
+```
+
+量词语法有下面几个。
+
+- `?(pattern-list)`：匹配零个或一个模式。
+- `*(pattern-list)`：匹配零个或多个模式。
+- `+(pattern-list)`：匹配一个或多个模式。
+- `@(pattern-list)`：只匹配一个模式。
+- `!(pattern-list)`：匹配零个或一个以上的模式，但不匹配单独一个的模式。
+
+```bash
+$ ls abc?(.)txt
+abctxt abc.txt
+```
+
+上面例子中，`?(.)`匹配零个或一个点。
+
+```bash
+$ ls abc?(def)
+abc abcdef
+```
+
+上面例子中，`?(def)`匹配零个或一个`def`。
+
+```bash
+$ ls abc+(.txt|.php)
+abc.php abc.txt
+```
+
+上面例子中，`+(.txt|.php)`匹配文件有一个`.txt`或`.php`后缀名。
+
+```bash
+$ ls abc+(.txt)
+abc.txt abc.txt.txt
+```
+
+上面例子中，`+(.txt)`匹配文件有一个或多个`.txt`后缀名。
+
+## shopt 命令
+
+`shopt`命令可以调整 Bash 的行为。它有好几个参数跟通配符扩展有关。
+
+它的命令格式如下。
+
+```bash
+# 打开某个参数
+$ shopt -s [optionname]
+
+# 关闭某个参数
+$ shopt -u [optionname]
+
+# 查询某个参数关闭还是打开
+$ shopt [optionname]
+```
+
+**（1）dotglob 参数**
+
+`dotglob`参数可以让文件通配符包括隐藏文件（即点开头的文件）。
+
+正常情况下，通配符扩展不包括隐藏文件。
+
+```bash
+$ ls *
+abc.txt
+```
+
+打开`dotglob`，就会包括隐藏文件。
+
+```bash
+$ shopt -s dotglob
+$ ls *
+abc.txt .config
+```
+
+**（2）nullglob 参数**
+
+`nullglob`参数可以让通配符不匹配任何文件名时，返回空字符。
+
+默认情况下，通配符不匹配任何文件名时，会保持不变。
+
+```bash
+$ rm b*
+rm: 无法删除'b*': 没有那个文件或目录
+```
+
+上面例子中，由于当前目录不包括`b`开头的文件名，导致`b*`不会发生文件名扩展，保持原样不变，所以`rm`命令报错没有`b*`这个文件。
+
+打开`nullglob`参数，就可以让不匹配的通配符返回空字符串。
+
+```bash
+$ shopt -s nullglob
+$ rm b*
+rm: 缺少操作数
+```
+
+上面例子中，由于没有`b*`匹配的文件名，所以`rm b*`扩展成了`rm`，导致报错变成了”缺少操作数“。
+
+**（3）failglob 参数**
+
+`failglob`参数使得通配符不匹配任何文件名时，Bash 会直接报错，而不是让各个命令去处理。
+
+```bash
+$ shopt -s failglob
+$ rm b*
+bash: 无匹配: b*
+```
+
+上面例子中，打开`failglob`以后，由于`b*`不匹配任何文件名，Bash 直接报错了，不再让`rm`命令去处理。
+
+**（4）extglob 参数**
+
+`extglob`参数使得 Bash 支持 ksh 的一些扩展语法。它默认情况下面，应该是打开的。
+
+```bash
+$ shopt extglob
+extglob        	on
+```
+
+它的主要应用是支持量词语法。如果不希望支持，可以用下面的命令关闭。
+
+```bash
+$ shopt -u extglob
+```
+
+**（5）nocaseglob 参数**
+
+`nocaseglob`参数可以让通配符扩展不区分大小写。
+
+```bash
+$ shopt -s nocaseglob
+$ ls /windows/program*
+/windows/ProgramData
+/windows/Program Files
+/windows/Program Files (x86)
+```
+
+上面例子中，打开`nocaseglob`以后，`program*`就不区分大小写了，可以匹配`ProgramData`等。
 
 ## 参考链接
 
