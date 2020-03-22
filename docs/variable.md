@@ -310,7 +310,7 @@ filename=${1:?"filename missing."}
 declare OPTION VARIABLE=value
 ```
 
-主要参数（OPTION）如下。
+`declare`命令的主要参数（OPTION）如下。
 
 - `-a`：声明数组变量。
 - `-i`：声明整数变量。

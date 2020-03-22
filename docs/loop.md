@@ -69,6 +69,21 @@ Bash 提供了两个内部命令，用来在循环内部跳出循环。
 
 `continue`命令立即终止本轮循环，开始执行下一轮循环。
 
+```bash
+#!/bin/bash
+while read -p "What file do you want to test?" filename
+do
+  if [ ! -e "$filename" ]; then
+    echo "The file does not exist."
+    continue
+  fi
+
+  echo "You entered a valid file.."
+done
+```
+
+上面例子中，只要用户输入的文件不存在，`continue`命令就会生效，直接进入下一轮循环（让用户重新输入文件名），不再执行后面的打印语句。
+
 ## until 循环
 
 `until`循环与`while`循环恰好相反，只要不符合判断条件（判断条件失败），就不断循环执行指定的语句。一旦符合判断条件，就退出循环。

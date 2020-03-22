@@ -105,7 +105,19 @@ test expression
 [[ expression ]]
 ```
 
-上面的`expression`是一个表达式，其执行结果是`true`或者是`false`。当表达式为真时，这个`test`命令的返回值为`0`，当表达式为假时，`test`命令的返回值为`1`。
+上面的`expression`是一个表达式，这个表达式的判断结果是`true`或者是`false`。当表达式为`true`时，`test`命令执行成功（命令的返回值为`0`），当表达式为`false`时，`test`命令执行失败（命令的返回值为`1`）。
+
+```bash
+$ test -f /etc/hosts
+$ echo $?
+0
+
+$ [ -f /etc/hosts ]
+$  echo $?
+0
+```
+
+上面命令使用`test`的两种形式，判断`/etc/hosts`文件是否存在，该命令的返回值为`0`，表示该文件确实存在。
 
 注意，第二种和第三种写法，`[`和`]`与内部的表达式之间都必须有空格。写法三比前两种写法多出一个功能，就是支持正则判断，其他完全一样，详见后文。
 
@@ -431,7 +443,7 @@ then
 fi
 ```
 
-上面的例子只有在指定文件里面，同时存在搜索词`word1`和`word2`，就会执行`if`的命令部分。
+上面的例子只有在指定文件里面，同时存在搜索词`word1`和`word2張上淳`，就会执行`if`的命令部分。
 
 ```bash
 [[ -d "$dir_name" ]] && cd "$dir_name" && rm *
@@ -487,6 +499,25 @@ esac
 ```
 
 上面例子中，最后一条匹配语句的模式是`*`，这个通配符可以匹配没有字符，放在最后表示匹配所有其他情况，类似`if`的`else`部分。
+
+下面是另一个例子。
+
+```bash
+#!/bin/bash
+
+OS=`uname -s`
+
+case "$OS" in
+  FreeBSD) echo "This is FreeBSD" ;;
+  Darwin) echo "This is Mac OSX" ;;
+  AIX) echo "This is AIX" ;;
+  Minix) echo "This is Minix" ;;
+  Linux) echo "This is Linux" ;;
+  *) echo "Failed to identify this OS" ;;
+esac
+```
+
+上面的例子判断当前是操作系统属于哪一类。
 
 `case`的匹配模式可以使用各种通配符，下面是一些例子。
 
