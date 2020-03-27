@@ -310,16 +310,42 @@ fi
 
 ### 算术条件
 
-Bash 还提供了`((...))`作为算术条件。如果算术计算的结果是非零值，则表示判断成立。
+Bash 还提供了`((...))`作为算术条件，进行算术运算的判断。
+
+```bash
+if ((3 > 2)); then
+  echo "true"
+fi
+```
+
+上面代码执行后，会打印出`true`。
+
+如果算术计算的结果是非零值，则表示判断成立。
 
 ```bash
 $ if ((1)); then echo "It is true."; fi
 It is true.
-$ if ((0)); then echo "It is true."; fi
-$
+$ if ((0)); then echo "It is true."; else echo "it is false."; fi
+It is false.
 ```
 
 上面例子中，`((1))`表示判断成立，`((0))`表示判断不成立。
+
+算术条件`((...))`也可以用于变量赋值。
+
+```bash
+$ if (( foo = 5 ));then echo "foo is $foo"; fi
+foo is 5
+```
+
+上面例子中，`(( foo = 5 ))`完成了两件事情。首先把`5`赋值给变量`foo`，然后根据返回值`5`，判断条件为真。
+
+注意，赋值语句返回等号右边的值，如果返回的是`0`，则判断为假。
+
+```bash
+$ if (( foo = 0 ));then echo "It is true.";else echo "It is false."; fi
+It is false.
+```
 
 下面是用算术条件改写的数值判断脚本。
 
@@ -328,23 +354,23 @@ $
 # test-integer2a: evaluate the value of an integer.
 INT=-5
 if [[ "$INT" =~ ^-?[0-9]+$ ]]; then
-    if ((INT == 0)); then
-        echo "INT is zero."
+  if ((INT == 0)); then
+    echo "INT is zero."
+  else
+    if ((INT < 0)); then
+      echo "INT is negative."
     else
-        if ((INT < 0)); then
-            echo "INT is negative."
-        else
-            echo "INT is positive."
-        fi
-        if (( ((INT % 2)) == 0)); then
-            echo "INT is even."
-        else
-            echo "INT is odd."
-        fi
+      echo "INT is positive."
     fi
+    if (( ((INT % 2)) == 0)); then
+      echo "INT is even."
+    else
+      echo "INT is odd."
+    fi
+  fi
 else
-    echo "INT is not an integer." >&2
-    exit 1
+  echo "INT is not an integer." >&2
+  exit 1
 fi
 ```
 

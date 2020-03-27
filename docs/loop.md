@@ -67,6 +67,18 @@ Bash 提供了两个内部命令，用来在循环内部跳出循环。
 
 `break`命令立即终止循环，程序继续执行循环之后的语句，即不再执行剩下的循环。
 
+```bash
+for number in 1 2 3 4 5 6
+do
+  echo "number is $number"
+  if [ "$number" = "3" ]; then
+    break
+  fi
+done
+```
+
+上面例子只会打印3行结果。一旦变量`$number`等于3，就会跳出循环，不再继续执行。
+
 `continue`命令立即终止本轮循环，开始执行下一轮循环。
 
 ```bash
@@ -222,6 +234,8 @@ for filename in "$@" ; do
 done
 ```
 
+注意，`for...in`循环用在函数之中时，如果省略`in list`的部分，则`list`默认等于函数的所有参数。
+
 ## for 循环
 
 `for`循环还支持 C 语言的循环语法。
@@ -234,13 +248,15 @@ done
 
 上面代码中，`expression1`用来初始化循环条件，`expression2`用来决定循环结束的条件，`expression3`在每次循环迭代的末尾执行，用于更新值。
 
+注意，循环条件放在双重圆括号之中。另外，圆括号之中使用变量，不必加上美元符号`$`。
+
 它等同于下面的`while`循环。
 
 ```bash
 (( expression1 ))
 while (( expression2 )); do
-    commands
-    (( expression3 ))
+  commands
+  (( expression3 ))
 done
 ```
 
