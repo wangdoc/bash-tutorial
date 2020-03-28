@@ -119,6 +119,7 @@ $ source .bashrc
 `source`命令最大的特点是在当前 Shell 执行脚本，不像直接执行脚本时，会新建一个子 Shell。所以，`source`命令执行脚本时，不需要`export`变量。
 
 ```bash
+#!/bin/bash
 # test.sh
 echo $foo
 ```
@@ -144,4 +145,16 @@ $ bash test.sh
 ```bash
 $ . .bashrc
 ```
+
+`source`命令的另一个用途，是在脚本内部加载外部库。
+
+```bash
+#!/bin/bash
+
+source ./lib.sh
+
+function_from_lib
+```
+
+上面脚本在内部使用`source`命令加载了一个外部库，然后就可以在脚本里面，使用这个外部库定义的函数。
 

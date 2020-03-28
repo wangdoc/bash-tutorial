@@ -26,7 +26,7 @@ function fn() {
 
 ```bash
 hello() {
-  echo "Hello $1";
+  echo "Hello $1"
 }
 ```
 
@@ -126,7 +126,7 @@ $ log_msg "This is sample log message"
 [ 2018-08-16 19:56:34 ]: This is sample log message
 ```
 
-## 返回值
+## return 命令
 
 `return`命令用于从函数返回一个值。函数执行到这条命令，就不再往下执行了，直接返回了。
 
