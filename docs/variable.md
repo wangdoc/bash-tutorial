@@ -97,6 +97,29 @@ foo_file
 
 事实上，读取变量的语法`$foo`，可以看作是`${foo}`的简写形式。
 
+如果变量的值本身也是变量，可以使用`${!varname}`的语法，读取最终的值。
+
+```bash
+#!/bin/bash
+# test.sh
+
+for myvar in USER UID SHELL
+do
+  echo $myvar is ${!myvar}
+done
+```
+
+运行上面的脚本，会得到下面的结果。
+
+```bash
+$ ./test.sh
+USER is ruanyf
+UID is 1000
+SHELL is /bin/bash
+```
+
+上面的例子中，变量`myvar`的值依次是`USER`、`UID`和`SHELL`。`${!myvar}`将它们展开成最终的值。
+
 ## 创建变量
 
 用户创建变量的时候，一般约定，全局变量的变量名都使用大写字母，局部变量使用小写字母。
@@ -270,9 +293,9 @@ himBHs
 
 特殊变量还有`$@`和`$#`，与脚本的参数数量有关，参见脚本一章。
 
-## 确保变量存在
+## 变量的默认值
 
-Bash 提供一些特殊语法，保证变量肯定存在，且不为空。
+Bash 提供一些特殊语法，设置变量的默认值，或者保证变量肯定存在，且不为空。
 
 ```bash
 ${varname:-word}
