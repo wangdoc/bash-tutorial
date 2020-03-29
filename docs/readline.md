@@ -98,6 +98,8 @@ Readline 提供了许多快捷键，用来快速地移动光标。默认的快�
 
 ## 操作历史
 
+### 基本用法
+
 Bash 会保留用户的操作历史，即用户输入的每一条命令。退出当前 Shell 的时候，Bash 会将用户刚才的操作历史写入`~/.bash_history`文件，该文件默认储存500个操作。
 
 环境变量`HISTFILE`总是指向这个文件。
@@ -106,6 +108,38 @@ Bash 会保留用户的操作历史，即用户输入的每一条命令。退出
 $ echo $HISTFILE
 /home/me/.bash_history
 ```
+
+有了操作历史以后，就可以使用方向键的`↑`和`↓`，快速浏览上一条和下一条命令。下面的方法还可以快速执行以前执行过的命令。
+
+```bash
+$ echo Hello World
+Hello World
+
+$ echo Goodbye
+Goodbye
+
+$ !e
+echo Goodbye
+Goodbye
+
+$ !echo
+echo Goodbye
+Goodbye
+
+$ !echo H
+echo Goodbye H
+Goodbye H
+
+$ !echo H G
+echo Goodbye H G
+Goodbye H G
+```
+
+上面例子中，`!e`表示找出操作历史之中，最近的那一条以`e`开头的命令并执行。Bash 会先输出那一条命令`echo Goodbye`，然后直接执行。同理，`!echo`也会执行最近一条以`echo`开头的命令。
+
+注意，`!string`语法只会匹配命令，不会匹配参数。所以`!echo H`不会执行`echo Hello World`，而是会执行`echo Goobye`，并把参数`H`附加在这条命令之后。同理，`!echo H G`也是等同于`echo Goodbye`命令之后附件`H G`。
+
+最后，按下 Ctrl + r 会显示操作历史，可以用方向键上下移动，选择其中要执行的命令。也可以键入命令的首字母，Shell 就会自动在历史文件中，查询并显示匹配的结果。
 
 ### history 命令
 
@@ -126,6 +160,8 @@ $ history
 
 上面代码中，`%F`相当于`%Y - %m - %d`，`%T`相当于` %H : %M : %S`。
 
+只要设置`HISTTIMEFORMAT`这个环境变量，就会保存命令的执行时间戳。如果不设置，就不会保存时间戳。
+
 如果不希望保存本次操作的历史，可以设置环境变量`HISTSIZE`等于0。
 
 ```bash
@@ -142,19 +178,13 @@ $ history | grep /usr/bin
 
 上面命令返回`.bash_history`文件里面，那些包含`/usr/bin`的命令。
 
-还有一种更简便的搜索方式，就是按下`Ctrl - r`，然后每键入一个字符，Shell 就会自动在历史文件中，查询并显示匹配的结果。这时，上下移动选中想要执行的命令，按下回车键即可。
-
-知道了命令的行号以后，可以用`感叹号 + 行号`执行该命令。如果想要执行`.bash_history`里面的第8个命令，可以像下面这样操作。
+操作历史的每一条记录都有编号。知道了命令的编号以后，可以用`感叹号 + 编号`执行该命令。如果想要执行`.bash_history`里面的第8条命令，可以像下面这样操作。
 
 ```bash
 $ !8
 ```
 
-上面的命令执行操作历史里面第8条命令。
-
-`感叹号 + 搜索字符串`会执行最近一个符合条件的命令。比如，以前执行过`netstat -np | grep 22`，那么输入`!net`就会执行这条命令。
-
-`-c`参数可以清除操作历史。
+`history`命令的`-c`参数可以清除操作历史。
 
 ```bash
 $ history -c

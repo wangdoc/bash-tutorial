@@ -2,7 +2,7 @@
 
 Bash 是 Unix 系统和 Linux 系统的一种 Shell（命令行环境），是目前绝大多数 Linux 发行版的默认 Shell。
 
-## Shell 是什么
+## Shell 和 Bash
 
 Shell 有多种含义。
 
@@ -14,7 +14,9 @@ Shell 有多种含义。
 
 Shell 这个单词的原意是“外壳”，跟 kernel （内核）相对应，比喻内核外面的一层，即用户跟内核交互的对话界面。本书中，除非特别指明，Shell 指的就是命令行环境。
 
-Shell 有很多种，只要能给用户提供命令行环境的程序，都可以看作是 Shell。历史上，主要的 Shell 有 Bourne Shell（缩写为`sh`）、Bourne Again shell（缩写为`bash`）、C Shell（缩写为`csh`）、TENEX C Shell（缩写为`tcsh`）、Korn shell（缩写为`ksh`）、Z Shell（缩写为`zsh`）、Friendly Interactive Shell（缩写为`fish`）。Bash 是目前最常用的 Shell，除非特别指明，下文的 Shell 和 Bash 当作同义词使用，可以互换。
+Shell 有很多种，只要能给用户提供命令行环境的程序，都可以看作是 Shell。历史上，主要的 Shell 有 Bourne Shell（缩写为`sh`）、Bourne Again shell（缩写为`bash`）、C Shell（缩写为`csh`）、TENEX C Shell（缩写为`tcsh`）、Korn shell（缩写为`ksh`）、Z Shell（缩写为`zsh`）、Friendly Interactive Shell（缩写为`fish`）。
+
+Bash 是目前最常用的 Shell，除非特别指明，下文的 Shell 和 Bash 当作同义词使用，可以互换。
 
 下面的命令可以查看当前运行的 Shell。
 
@@ -33,7 +35,7 @@ $ cat /etc/shells
 
 Linux 允许每个用户使用不同的 Shell，用户的默认 Shell 一般都是 Bash。
 
-## 如何进入命令行环境
+## 命令行环境
 
 如果是不带有图形环境的 Linux 系统，启动后就直接是命令行环境。
 
@@ -200,7 +202,7 @@ keyword
 
 ## Bash 的快捷键
 
-Bash 有以下快捷键，可以大大方便操作。
+Bash 提供很多快捷键，可以大大方便操作。下面的是一些最常用的，完整的介绍参见《行操作》一章。
 
 - `Ctrl + L`：清除屏幕并将当前行移到页面顶部。
 - `Ctrl + C`：中止当前正在执行的命令。
@@ -208,7 +210,7 @@ Bash 有以下快捷键，可以大大方便操作。
 - `Shift + PageDown`：向下滚动。
 - `Ctrl + U`：从光标位置删除到行首。
 - `Ctrl + K`：从光标位置删除到行尾。
-- `Ctrl + D`：关闭shell会话。
+- `Ctrl + D`：关闭 Shell 会话。
 - `↑`，`↓`：浏览已执行命令的历史记录。
 
 除了上面的快捷键，Bash 还具有自动补全功能。命令输入到一半的时候，可以按下 Tab 键，Bash 会自动完成剩下的部分。比如，输入`pw`，然后按一下 Tab 键，Bash 会自动补上`d`。
