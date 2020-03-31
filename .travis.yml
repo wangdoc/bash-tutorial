@@ -9,5 +9,5 @@ branches:
 script: bash ./deploy.sh
 env:
   global:
-  - ENCRYPTION_LABEL: [xxxxxx]
+  - ENCRYPTION_LABEL: 91658d000fbc
   - COMMIT_AUTHOR_EMAIL: yifeng.ruan@gmail.com

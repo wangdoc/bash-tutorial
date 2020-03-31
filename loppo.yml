@@ -6,3 +6,5 @@ customization: false
 themeDir: loppo-theme
 direction: ltr
 id: bash
+hasComments: true
+isTutorial: true
