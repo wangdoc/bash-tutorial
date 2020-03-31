@@ -1,0 +1,8 @@
+dir: docs
+output: dist
+site: Bash 脚本教程
+theme: wangdoc
+customization: false
+themeDir: loppo-theme
+direction: ltr
+id: bash

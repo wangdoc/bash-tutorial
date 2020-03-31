@@ -1,0 +1,41 @@
+{
+  "name": "bash-tutorial",
+  "version": "1.0.0",
+  "description": "本教程介绍 Linux 命令行 Bash 的基本用法和脚本编程。",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangdoc/bash-tutorial.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "CC-BY-SA-4.0",
+  "bugs": {
+    "url": "https://github.com/wangdoc/bash-tutorial/issues"
+  },
+  "scripts": {
+    "build": "loppo --site \"Bash 脚本教程\" --id bash --theme wangdoc",
+    "build-and-commit": "npm run build && npm run commit",
+    "commit": "gh-pages --dist dist --dest dist/bash --branch master --repo git@github.com:wangdoc/website.git",
+    "chapter": "loppo chapter",
+    "server": "loppo server"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm update"
+    }
+  },
+  "homepage": "https://github.com/wangdoc/bash-tutorial#readme",
+  "dependencies": {
+    "gh-pages": "^2.2.0",
+    "husky": "^4.2.3",
+    "loppo": "latest",
+    "loppo-theme-wangdoc": "latest"
+  }
+}
