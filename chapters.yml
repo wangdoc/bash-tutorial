@@ -1,8 +1,8 @@
 - intro.md: Bash 简介
 - grammar.md: Bash 的基本语法
-- expansion.md: Bash 的扩展模式
-- string.md: 字符串操作
 - quotation.md: 引号和转义
+- string.md: 字符串操作
+- expansion.md: Bash 的模式扩展
 - arithmetic.md: Bash 的算术运算
 - variable.md: Bash 变量
 - script.md: Bash 脚本简介
