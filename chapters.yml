@@ -6,6 +6,7 @@
 - string.md: 字符串操作
 - arithmetic.md: 算术运算
 - script.md: 脚本入门
+- read.md: read 命令
 - condition.md: 条件判断
 - loop.md: 循环
 - function.md: 函数
