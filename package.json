@@ -17,7 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/wangdoc/bash-tutorial.git"
   },
-  "keywords": [],
+  "keywords": ["tutorial", "Bash"],
   "author": "",
   "license": "CC-BY-SA-4.0",
   "bugs": {
@@ -32,7 +32,7 @@
   "dependencies": {
     "gh-pages": "^2.2.0",
     "husky": "^4.2.3",
-    "loppo": "^0.6.17",
+    "loppo": "latest",
     "loppo-theme-wangdoc": "latest"
   }
 }
