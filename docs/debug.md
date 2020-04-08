@@ -122,7 +122,7 @@ This is line 3
 
 ### FUNCNAME
 
-变量`FUNCNAME`返回一个数组，内容是当前的函数调用堆栈。堆栈最底层的函数（最后一个调用的函数）是该数组的0号成员，以此类推。
+变量`FUNCNAME`返回一个数组，内容是当前的函数调用堆栈。该数组的0号成员是当前调用的函数，1号成员是调用当前函数的函数，以此类推。
 
 ```bash
 #!/bin/bash
@@ -161,7 +161,7 @@ func2: FUNCNAME2 is main
 
 ### BASH_SOURCE
 
-变量`BASH_SOURCE`返回一个数组，内容是当前的脚本调用堆栈。堆栈最底层的脚本（即当前执行的脚本）是该数组的0号成员，以此类推。
+变量`BASH_SOURCE`返回一个数组，内容是当前的脚本调用堆栈。该数组的0号成员是当前执行的脚本，1号成员是调用当前脚本的脚本，以此类推，跟变量`FUNCNAME`是一一对应关系。
 
 下面有两个子脚本`lib1.sh`和`lib2.sh`。
 
@@ -214,7 +214,7 @@ func2: BASH_SOURCE2 is ./main.sh
 
 ### BASH_LINENO
 
-变量`BASH_SOURCE`返回一个数组，内容是每一轮调用堆栈对应的行号。`${BASH_LINENO[$i]}` 是`${FUNCNAME[$i+1]}`在文件`${BASH_SOURCE[$i+1]}`里面被调用时的行号。
+变量`BASH_SOURCE`返回一个数组，内容是每一轮调用对应的行号。`${BASH_LINENO[$i]}`跟`${FUNCNAME[$i]}`是一一对应关系，表示`${FUNCNAME[$i]}`在调用它的脚本文件`${BASH_SOURCE[$i+1]}`里面的行号。
 
 下面有两个子脚本`lib1.sh`和`lib2.sh`。
 
@@ -223,7 +223,7 @@ func2: BASH_SOURCE2 is ./main.sh
 function func1()
 {
   echo "func1: BASH_LINENO is ${BASH_LINENO[0]}"
-  echo "func1: FUNCNAME is ${FUNCNAME[1]}"
+  echo "func1: FUNCNAME is ${FUNCNAME[0]}"
   echo "func1: BASH_SOURCE is ${BASH_SOURCE[1]}"
 
   func2
@@ -234,8 +234,8 @@ function func1()
 # lib2.sh
 function func2()
 {
-  echo "func2: BASH_LINENO is ${BASH_SOURCE[0]}"
-  echo "func2: FUNCNAME is ${FUNCNAME[1]}"
+  echo "func2: BASH_LINENO is ${BASH_LINENO[0]}"
+  echo "func2: FUNCNAME is ${FUNCNAME[0]}"
   echo "func2: BASH_SOURCE is ${BASH_SOURCE[1]}"
 }
 ```
@@ -257,12 +257,12 @@ func1
 ```bash
 $ ./main.sh
 func1: BASH_LINENO is 7
-func1: FUNCNAME is main
+func1: FUNCNAME is func1
 func1: BASH_SOURCE is main.sh
 func2: BASH_LINENO is 8
-func2: FUNCNAME is func1
+func2: FUNCNAME is func2
 func2: BASH_SOURCE is lib1.sh
 ```
 
-上面例子中，对于函数`func1`来说，它是在`main.sh`的第7行调用的；对于函数`func2`来说，它是在`lib1.sh`的第8行调用的。
+上面例子中，函数`func1`是在`main.sh`的第7行调用，函数`func2`是在`lib1.sh`的第8行调用的。
 
