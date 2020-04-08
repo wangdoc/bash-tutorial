@@ -1,10 +1,12 @@
 # Bash 函数
 
+本章介绍 Bash 函数的用法。
+
 ## 简介
 
 函数（function）是可以重复使用的代码片段，有利于代码的复用。它与别名（alias）的区别是，别名只适合封装简单的单个命令，函数则可以封装复杂的多行命令。
 
-函数总是在当前 Shell 执行，这是跟脚本的一个重大区别。如果函数与脚本同名，函数会优先执行。但是，函数的优先级不如别名，即如果函数与别名同名，那么别名优先执行。
+函数总是在当前 Shell 执行，这是跟脚本的一个重大区别，Bash 会新建一个子 Shell 执行脚本。如果函数与脚本同名，函数会优先执行。但是，函数的优先级不如别名，即如果函数与别名同名，那么别名优先执行。
 
 Bash 函数定义的语法有两种。
 
@@ -20,7 +22,7 @@ function fn() {
 }
 ```
 
-上面代码中，`fn`是自定义的函数名，函数代码就写在大括号之中。这两种定义函数的写法是等价的。
+上面代码中，`fn`是自定义的函数名，函数代码就写在大括号之中。这两种写法是等价的。
 
 下面是一个简单函数的例子。
 
@@ -32,7 +34,7 @@ hello() {
 
 上面代码中，函数体里面的`$1`表示函数调用时的第一个参数。
 
-调用时，可以直接执行函数名，参数跟着函数名后面。
+调用时，就直接写函数名，参数跟在函数名后面。
 
 ```bash
 $ hello world
@@ -46,6 +48,12 @@ today() {
   echo -n "Today's date is: "
   date +"%A, %B %-d, %Y"
 }
+```
+
+删除一个函数，可以使用`unset`命令。
+
+```bash
+unset -f functionName
 ```
 
 查看当前 Shell 已经定义的所有函数，可以使用`declare`命令。
@@ -68,15 +76,9 @@ $ declare -f functionName
 $ declare -F
 ```
 
-删除一个函数，可以使用`unset`命令。
-
-```bash
-unset -f functionName
-```
-
 ## 参数变量
 
-函数体内可以使用参数变量，获取外部参数。函数的参数变量，与脚本参数变量是一致的。
+函数体内可以使用参数变量，获取函数参数。函数的参数变量，与脚本参数变量是一致的。
 
 - `$1`~`$9`：函数的第一个到第9个的参数。
 - `$0`：函数所在的脚本名。
@@ -89,7 +91,9 @@ unset -f functionName
 下面是一个示例脚本`test.sh`。
 
 ```bash
-# 脚本文件 test.sh
+#!/bin/bash
+# test.sh
+
 function alice {
   echo "alice: $@"
   echo "$0: $1 $2 $3 $4"
@@ -109,7 +113,7 @@ test.sh: in wonderland
 2 arguments
 ```
 
-上面这个例子中，由于函数`alice`只有第一个和第二个参数，所以第三个和第四个参数为空。
+上面例子中，由于函数`alice`只有第一个和第二个参数，所以第三个和第四个参数为空。
 
 下面是一个日志函数的例子。
 
@@ -153,7 +157,7 @@ function name {
 }
 ```
 
-## 全局变量和局部变量
+## 全局变量和局部变量，local 命令
 
 Bash 函数体内直接声明的变量，属于全局变量，整个脚本都可以读取。这一点需要特别小心。
 
@@ -214,8 +218,9 @@ fn: foo = 1
 global: foo =
 ```
 
-上面例子中，`local`命令声明的`foo`变量，只在函数体内有效，函数体外没有定义。
+上面例子中，`local`命令声明的`$foo`变量，只在函数体内有效，函数体外没有定义。
 
 ## 参考链接
 
-- [How to define and use functions in Linux Shell Script](https://www.linuxtechi.com/define-use-functions-linux-shell-script/), by Pradeep Kumar 
+- [How to define and use functions in Linux Shell Script](https://www.linuxtechi.com/define-use-functions-linux-shell-script/), by Pradeep Kumar
+

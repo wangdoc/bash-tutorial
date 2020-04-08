@@ -1,20 +1,21 @@
-- intro.md: Bash 简介
-- grammar.md: Bash 的基本语法
-- expansion.md: Bash 的模式扩展
+- intro.md: 简介
+- grammar.md: 基本语法
+- expansion.md: 模式扩展
 - quotation.md: 引号和转义
+- variable.md: 变量
 - string.md: 字符串操作
-- arithmetic.md: Bash 的算术运算
-- variable.md: Bash 变量
-- script.md: Bash 脚本简介
+- arithmetic.md: 算术运算
+- stack.md: 目录堆栈
+- script.md: 脚本入门
+- read.md: read 命令
 - condition.md: 条件判断
 - loop.md: 循环
-- function.md: Bash 函数
-- startup.md: Bash 启动环境
-- stack.md: 目录堆栈
+- function.md: 函数
 - array.md: 数组
-- readline.md: Bash 行操作
-- prompt.md: 命令提示符
-- debug.md: 脚本除错
 - set.md: set 命令
+- debug.md: 脚本除错
+- readline.md: 行操作
+- startup.md: 启动环境
+- prompt.md: 命令提示符
 - mktemp.md: mktemp 命令
 - trap.md: trap 命令

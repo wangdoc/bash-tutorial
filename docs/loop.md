@@ -8,13 +8,13 @@ Bash 提供三种循环语法`for`、`while`和`until`。
 
 ```bash
 while condition; do
-  statements
+  commands
 done
 ```
 
-上面代码中，只要满足条件`condition`，就会执行命令`statements`。然后，再次判断是否满足条件`condition`，只要满足，就会一直执行下去。只有不满足条件，才会退出循环。
+上面代码中，只要满足条件`condition`，就会执行命令`commands`。然后，再次判断是否满足条件`condition`，只要满足，就会一直执行下去。只有不满足条件，才会退出循环。
 
-循环条件`condition`可以使用`test`命令，跟`if`语句的判断条件一致。
+循环条件`condition`可以使用`test`命令，跟`if`结构的判断条件写法一致。
 
 ```bash
 #!/bin/bash
@@ -26,7 +26,7 @@ while [ "$number" -lt 10 ]; do
 done
 ```
 
-上面例子中，只要变量`number`小于10，就会不断加1，直到`number`等于10，然后退出循环。
+上面例子中，只要变量`$number`小于10，就会不断加1，直到`$number`等于10，然后退出循环。
 
 关键字`do`可以跟`while`不在同一行，这时两者之间不需要使用分号分隔。
 
@@ -59,42 +59,7 @@ $ while echo 'ECHO'; do echo 'Hi, while looping ...'; done
 $ while true; false; do echo 'Hi, looping ...'; done
 ```
 
-上面代码运行后，不会有任何结果，因为`while`的最后一个命令是`false`。
-
-## break，continue
-
-Bash 提供了两个内部命令，用来在循环内部跳出循环。
-
-`break`命令立即终止循环，程序继续执行循环之后的语句，即不再执行剩下的循环。
-
-```bash
-for number in 1 2 3 4 5 6
-do
-  echo "number is $number"
-  if [ "$number" = "3" ]; then
-    break
-  fi
-done
-```
-
-上面例子只会打印3行结果。一旦变量`$number`等于3，就会跳出循环，不再继续执行。
-
-`continue`命令立即终止本轮循环，开始执行下一轮循环。
-
-```bash
-#!/bin/bash
-while read -p "What file do you want to test?" filename
-do
-  if [ ! -e "$filename" ]; then
-    echo "The file does not exist."
-    continue
-  fi
-
-  echo "You entered a valid file.."
-done
-```
-
-上面例子中，只要用户输入的文件不存在，`continue`命令就会生效，直接进入下一轮循环（让用户重新输入文件名），不再执行后面的打印语句。
+上面代码运行后，不会有任何输出，因为`while`的最后一个命令是`false`。
 
 ## until 循环
 
@@ -105,8 +70,6 @@ until condition; do
   commands
 done
 ```
-
-判断条件`condition`可以使用`test`命令，跟`if`语句的判断一致。
 
 关键字`do`可以与`until`不写在同一行，这时两者之间不需要分号分隔。
 
@@ -234,7 +197,7 @@ for filename in "$@" ; do
 done
 ```
 
-注意，`for...in`循环用在函数之中时，如果省略`in list`的部分，则`list`默认等于函数的所有参数。
+在函数体中也是一样的，`for...in`循环省略`in list`的部分，则`list`默认等于函数的所有参数。
 
 ## for 循环
 
@@ -284,6 +247,44 @@ done
 
 上面脚本会反复读取命令行输入，直到用户输入了一个点（`.`）位为止，才会跳出循环。
 
+## break，continue
+
+Bash 提供了两个内部命令`break`和`continue`，用来在循环内部跳出循环。
+
+`break`命令立即终止循环，程序继续执行循环块之后的语句，即不再执行剩下的循环。
+
+```bash
+#!/bin/bash
+
+for number in 1 2 3 4 5 6
+do
+  echo "number is $number"
+  if [ "$number" = "3" ]; then
+    break
+  fi
+done
+```
+
+上面例子只会打印3行结果。一旦变量`$number`等于3，就会跳出循环，不再继续执行。
+
+`continue`命令立即终止本轮循环，开始执行下一轮循环。
+
+```bash
+#!/bin/bash
+
+while read -p "What file do you want to test?" filename
+do
+  if [ ! -e "$filename" ]; then
+    echo "The file does not exist."
+    continue
+  fi
+
+  echo "You entered a valid file.."
+done
+```
+
+上面例子中，只要用户输入的文件不存在，`continue`命令就会生效，直接进入下一轮循环（让用户重新输入文件名），不再执行后面的打印语句。
+
 ## select 结构
 
 `select`结构主要用来生成简单的菜单。它的语法与`for...in`循环基本一致。
@@ -307,18 +308,34 @@ Bash 会对`select`依次进行下面的处理。
 下面是一个例子。
 
 ```bash
+#!/bin/bash
+# select.sh
+
 select brand in Samsung Sony iphone symphony Walton
 do
   echo "You have chosen $brand"
 done
 ```
 
-上面例子中，Bash 会让用户选择一个列出的品牌，然后将其打印出来。并且不断重复这个过程，直到用户按下`Ctrl + c`，退出执行。
+执行上面的脚本，Bash 会输出一个品牌的列表，让用户选择。
+
+```bash
+$ ./select.sh
+1) Samsung
+2) Sony
+3) iphone
+4) symphony
+5) Walton
+#?
+```
+
+如果用户没有输入编号，直接按回车键。Bash 就会重新输出一遍这个菜单，直到用户按下`Ctrl + c`，退出执行。
 
 `select`可以与`case`结合，针对不同项，执行不同的命令。
 
 ```bash
 #!/bin/bash
+
 echo "Which Operating System do you like?"
 
 select os in Ubuntu LinuxMint Windows8 Windows7 WindowsXP
@@ -343,3 +360,4 @@ done
 ## 参考链接
 
 - [Bash Select Command](https://linuxhint.com/bash_select_command/), Fahmida Yesmin
+

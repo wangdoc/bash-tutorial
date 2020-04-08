@@ -7,24 +7,21 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wangdoc/bash-tutorial.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "CC-BY-SA-4.0",
-  "bugs": {
-    "url": "https://github.com/wangdoc/bash-tutorial/issues"
-  },
-  "scripts": {
     "build": "loppo --site \"Bash 脚本教程\" --id bash --theme wangdoc",
     "build-and-commit": "npm run build && npm run commit",
     "commit": "gh-pages --dist dist --dest dist/bash --branch master --repo git@github.com:wangdoc/website.git",
     "chapter": "loppo chapter",
     "server": "loppo server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangdoc/bash-tutorial.git"
+  },
+  "keywords": ["tutorial", "Bash"],
+  "author": "",
+  "license": "CC-BY-SA-4.0",
+  "bugs": {
+    "url": "https://github.com/wangdoc/bash-tutorial/issues"
   },
   "husky": {
     "hooks": {
