@@ -5,6 +5,7 @@
 - variable.md: 变量
 - string.md: 字符串操作
 - arithmetic.md: 算术运算
+- readline.md: 行操作
 - stack.md: 目录堆栈
 - script.md: 脚本入门
 - read.md: read 命令
@@ -14,7 +15,6 @@
 - array.md: 数组
 - set.md: set 命令
 - debug.md: 脚本除错
-- readline.md: 行操作
 - startup.md: 启动环境
 - prompt.md: 命令提示符
 - mktemp.md: mktemp 命令
