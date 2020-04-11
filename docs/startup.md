@@ -4,7 +4,7 @@
 
 用户每次使用 Shell，都会开启一个与 Shell 的 Session（对话）。
 
-Session 有两种类型：登录 Session 和非登录 Session，也可以叫做登录 Session（login shell）和非登录 Session（non-login shell）。
+Session 有两种类型：登录 Session 和非登录 Session，也可以叫做 login shell 和 non-login shell。
 
 ### 登录 Session
 
@@ -14,11 +14,11 @@ Session 有两种类型：登录 Session 和非登录 Session，也可以叫做�
 
 - `/etc/profile`：所有用户的全局配置脚本。
 - `/etc/profile.d`目录里面所有`.sh`文件
-- `~/.bash_profile`：用户的个人配置脚本。
-- `~/.bash_login`：如果`~/.bash_profile`没找到，则尝试读取这个脚本（C shell 的初始化脚本）。
+- `~/.bash_profile`：用户的个人配置脚本。如果该脚本存在，则执行完就不再往下执行。
+- `~/.bash_login`：如果`~/.bash_profile`没找到，则尝试执行这个脚本（C shell 的初始化脚本）。如果该脚本存在，则执行完就不再往下执行。
 - `~/.profile`：如果`~/.bash_profile`和`~/.bash_login`都没找到，则尝试读取这个脚本（Bourne shell 和 Korn shell 的初始化脚本）。
 
-发行版更新的时候，会更新`/etc`里面的文件，比如`/etc/profile`，因此不要直接修改这个文件。如果想修改所有用户的登陆环境，就在`/etc/profile.d`目录里面新建`.sh`脚本。
+Linux 发行版更新的时候，会更新`/etc`里面的文件，比如`/etc/profile`，因此不要直接修改这个文件。如果想修改所有用户的登陆环境，就在`/etc/profile.d`目录里面新建`.sh`脚本。
 
 如果想修改你个人的登录环境，一般是写在`~/.bash_profile`里面。下面是一个典型的`.bash_profile`文件。
 
@@ -43,7 +43,7 @@ export EDITOR
 
 可以看到，这个脚本定义了一些最基本的环境变量，然后执行了`~/.bashrc`。
 
-`bash`命令的`--login`参数，会强制执行登陆 Session 会执行的脚本。
+`bash`命令的`--login`参数，会强制执行登录 Session 会执行的脚本。
 
 ```bash
 $ bash --login
@@ -61,8 +61,8 @@ $ bash --noprofile
 
 非登录 Session 的初始化脚本依次如下。
 
-- `/etc/bash.bashrc`
-- `~/.bashrc`
+- `/etc/bash.bashrc`：对全体用户有效。
+- `~/.bashrc`：仅对当前用户有效。
 
 对用户来说，`~/.bashrc`通常是最重要的脚本。非登录 Session 默认会执行它，而登陆 Session 一般也会通过调用执行它。由于每次执行 Bash 脚本，都会新建一个非登录 Session，所以`~/.bashrc`也是每次执行脚本都会执行的。
 
@@ -72,7 +72,7 @@ $ bash --noprofile
 $ bash --norc
 ```
 
-`bash`命令的`--rcfile`参数，指定一个另一个脚本代替`.bashrc`。
+`bash`命令的`--rcfile`参数，指定另一个脚本代替`.bashrc`。
 
 ```bash
 $ bash --rcfile testrc
@@ -140,12 +140,6 @@ $ bash test.sh
 
 上面例子中，当前 Shell 的变量`foo`并没有`export`，所以直接执行无法读取，但是`source`执行可以读取。
 
-`source`有一个简写形式，可以使用一个点（`.`）来表示。
-
-```bash
-$ . .bashrc
-```
-
 `source`命令的另一个用途，是在脚本内部加载外部库。
 
 ```bash
@@ -157,4 +151,10 @@ function_from_lib
 ```
 
 上面脚本在内部使用`source`命令加载了一个外部库，然后就可以在脚本里面，使用这个外部库定义的函数。
+
+`source`有一个简写形式，可以使用一个点（`.`）来表示。
+
+```bash
+$ . .bashrc
+```
 
