@@ -6,6 +6,13 @@ branches:
   only:
   - master
 
+install:
+- npm ci
+# keep the npm cache around to speed up installs
+cache:
+  directories:
+  - "$HOME/.npm"
+
 script: bash ./deploy.sh
 env:
   global:
