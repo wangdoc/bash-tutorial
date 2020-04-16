@@ -78,7 +78,7 @@ World
 命令行环境中，主要通过使用 Shell 命令，进行各种操作。Shell 命令基本都是下面的格式。
 
 ```bash
-$ command [ arg1 ... [ argN ]
+$ command [ arg1 ... [ argN ]]
 ```
 
 上面代码中，`command`是具体的命令或者一个可执行文件，`arg1 ... argN`是传递给命令的参数，它们是可选的。
