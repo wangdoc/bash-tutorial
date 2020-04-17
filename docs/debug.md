@@ -214,7 +214,7 @@ func2: BASH_SOURCE2 is ./main.sh
 
 ### BASH_LINENO
 
-变量`BASH_SOURCE`返回一个数组，内容是每一轮调用对应的行号。`${BASH_LINENO[$i]}`跟`${FUNCNAME[$i]}`是一一对应关系，表示`${FUNCNAME[$i]}`在调用它的脚本文件`${BASH_SOURCE[$i+1]}`里面的行号。
+变量`BASH_LINENO`返回一个数组，内容是每一轮调用对应的行号。`${BASH_LINENO[$i]}`跟`${FUNCNAME[$i]}`是一一对应关系，表示`${FUNCNAME[$i]}`在调用它的脚本文件`${BASH_SOURCE[$i+1]}`里面的行号。
 
 下面有两个子脚本`lib1.sh`和`lib2.sh`。
 
