@@ -574,7 +574,7 @@ esac
 ```bash
 #!/bin/bash
 
-echo -n "属于一个字母或数字 > "
+echo -n "输入一个字母或数字 > "
 read character
 case $character in
   [[:lower:]] | [[:upper:]] ) echo "输入了字母 $character"
