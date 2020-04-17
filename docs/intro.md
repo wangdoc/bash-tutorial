@@ -133,9 +133,13 @@ Shell 伴随着 Unix 系统的诞生而诞生。
 
 2019年，Bash 发布5.0版。
 
-用户可以通过环境变量`$BASH_VERSION`查看本机的 Bash 版本。
+用户可以通过`bash`命令的`--version`参数或者环境变量`$BASH_VERSION`，查看本机的 Bash 版本。
 
 ```bash
+$ bash --version
+GNU bash，版本 5.0.3(1)-release (x86_64-pc-linux-gnu)
+
+# 或者
 $ echo $BASH_VERSION
 5.0.3(1)-release
 ```

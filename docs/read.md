@@ -139,16 +139,21 @@ abc
 
 上面例子中，变量`letter`只包含3个字母。
 
-* (5) -e 參數*
+**（5）-e 参数**
 
-`-e`參數可開啟`readline`功能，在輸入時可使用快捷鍵。
-詳情可參閱行操作。
+`-e`参数允许用户输入的时候，使用`readline`库提供的快捷键，比如自动补全。具体的快捷键可以参阅《行操作》一章。
 
 ```bash
-# 和-i搭配使用可以填充預設值
-$ read -e -i 'abc'
-abc
+#!/bin/bash
+
+echo Please input the path to the file:
+
+read -e fileName
+
+echo $fileName
 ```
+
+上面例子中，`read`命令接受用户输入的文件名。这时，用户可能想使用 Tab 键的文件名“自动补全”功能，但是`read`命令的输入默认不支持`readline`库的功能。`-e`参数就可以允许用户使用自动补全。
 
 **（6）其他参数**
 
