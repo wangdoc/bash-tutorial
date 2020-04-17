@@ -300,11 +300,24 @@ $ bash -euxo pipefail script.sh
 $ shopt
 ```
 
+`shopt`命令后面跟着参数名，可以查询该参数是否打开。
+
+```bash
+$ shopt globstar
+globstar  off
+```
+
+上面例子表示`globstar`参数默认是关闭的。
+
+**（1）-s**
+
 `-s`用来打开某个参数。
 
 ```bash
 $ shopt -s optionNameHere
 ```
+
+**（2）-u**
 
 `-u`用来关闭某个参数。
 
@@ -316,6 +329,26 @@ $ shopt -u optionNameHere
 
 ```bash
 $ shopt -u histappend
+```
+
+**（3）-q**
+
+`-q`的作用也是查询某个参数是否打开，但不是直接输出查询结果，而是通过命令的执行状态（`$?`）表示查询结果。如果状态为`0`，表示该参数打开；如果为`1`，表示该参数关闭。
+
+```bash
+$ shopt -q globstar
+$ echo $?
+1
+```
+
+上面命令查询`globstar`参数是否打开。返回状态为`1`，表示该参数是关闭的。
+
+这个用法主要用于脚本，供`if`条件结构使用。
+
+```bash
+if shopt -q globstar; then
+  ...
+if
 ```
 
 ## 参考链接
