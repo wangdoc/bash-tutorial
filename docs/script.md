@@ -282,62 +282,6 @@ ls: 无法访问'-l': 没有那个文件或目录
 
 上面例子中，变量`myPath`的值为`-l`，不是路径。但是，`--`强制`$myPath`只能作为路径解释，导致报错“不存在该路径”。
 
-## 别名，alias 命令
-
-`alias`命令用来为一个命令指定别名，这样更便于记忆。下面是`alias`的格式。
-
-```bash
-alias NAME=DEFINITION
-```
-
-上面命令中，`NAME`是别名的名称，`DEFINITION`是别名对应的原始命令。注意，等号两侧不能有空格，否则会报错。
-
-一个常见的例子是为`grep`命令起一个`search`的别名。
-
-```bash
-alias search=grep
-```
-
-`alias`也可以用来为长命令指定一个更短的别名。下面是通过别名定义一个`today`的命令。
-
-```bash
-$ alias today='date +"%A, %B %-d, %Y"'
-$ today
-星期一, 一月 6, 2020
-```
-
-有时为了防止误删除文件，可以指定`rm`命令的别名。
-
-```bash
-$ alias rm='rm -i'
-```
-
-上面命令指定`rm`命令是`rm -i`，每次删除文件之前，都会让用户确认。
-
-`alias`定义的别名也可以接受参数，参数会直接传入原始命令。
-
-```bash
-$ alias echo='echo It says: '
-$ echo hello world
-It says: hello world
-```
-
-上面例子中，别名定义了`echo`命令的前两个参数，等同于修改了`echo`命令的默认行为。
-
-指定别名以后，就可以像使用其他命令一样使用别名。一般来说，都会把常用的别名写在`~/.bashrc`的末尾。另外，只能为命令定义别名，为其他部分（比如很长的路径）定义别名是无效的。
-
-直接调用`alias`命令，可以显示所有别名。
-
-```bash
-$ alias
-```
-
-`unalias`命令可以解除别名。
-
-```bash
-$ unalias lt
-```
-
 ## exit 命令
 
 `exit`命令用于终止当前脚本的执行，并向 Shell 返回一个退出值。
@@ -410,6 +354,112 @@ cd $some_directory && rm *
 
 # 第一步执行失败，才会执行第二步
 cd $some_directory || exit 1
+```
+
+## source 命令
+
+`source`命令用于执行一个脚本，通常用于重新加载一个配置文件。
+
+```bash
+$ source .bashrc
+```
+
+`source`命令最大的特点是在当前 Shell 执行脚本，不像直接执行脚本时，会新建一个子 Shell。所以，`source`命令执行脚本时，不需要`export`变量。
+
+```bash
+#!/bin/bash
+# test.sh
+echo $foo
+```
+
+上面脚本输出`$foo`变量的值。
+
+```bash
+# 当前 Shell 新建一个变量 foo
+$ foo=1
+
+# 打印输出 1
+$ source test.sh
+1
+
+# 打印输出空字符串
+$ bash test.sh
+```
+
+上面例子中，当前 Shell 的变量`foo`并没有`export`，所以直接执行无法读取，但是`source`执行可以读取。
+
+`source`命令的另一个用途，是在脚本内部加载外部库。
+
+```bash
+#!/bin/bash
+
+source ./lib.sh
+
+function_from_lib
+```
+
+上面脚本在内部使用`source`命令加载了一个外部库，然后就可以在脚本里面，使用这个外部库定义的函数。
+
+`source`有一个简写形式，可以使用一个点（`.`）来表示。
+
+```bash
+$ . .bashrc
+```
+
+## 别名，alias 命令
+
+`alias`命令用来为一个命令指定别名，这样更便于记忆。下面是`alias`的格式。
+
+```bash
+alias NAME=DEFINITION
+```
+
+上面命令中，`NAME`是别名的名称，`DEFINITION`是别名对应的原始命令。注意，等号两侧不能有空格，否则会报错。
+
+一个常见的例子是为`grep`命令起一个`search`的别名。
+
+```bash
+alias search=grep
+```
+
+`alias`也可以用来为长命令指定一个更短的别名。下面是通过别名定义一个`today`的命令。
+
+```bash
+$ alias today='date +"%A, %B %-d, %Y"'
+$ today
+星期一, 一月 6, 2020
+```
+
+有时为了防止误删除文件，可以指定`rm`命令的别名。
+
+```bash
+$ alias rm='rm -i'
+```
+
+上面命令指定`rm`命令是`rm -i`，每次删除文件之前，都会让用户确认。
+
+`alias`定义的别名也可以接受参数，参数会直接传入原始命令。
+
+```bash
+$ alias echo='echo It says: '
+$ echo hello world
+It says: hello world
+```
+
+上面例子中，别名定义了`echo`命令的前两个参数，等同于修改了`echo`命令的默认行为。
+
+指定别名以后，就可以像使用其他命令一样使用别名。一般来说，都会把常用的别名写在`~/.bashrc`的末尾。另外，只能为命令定义别名，为其他部分（比如很长的路径）定义别名是无效的。
+
+直接调用`alias`命令，可以显示所有别名。
+
+```bash
+$ alias
+```
+
+`unalias`命令可以解除别名。
+
+```bash
+$ unalias lt
 ```
 
 ## 参考链接
