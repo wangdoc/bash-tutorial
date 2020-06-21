@@ -64,13 +64,17 @@ REPLY = 'a b c d'
 `read`命令除了读取键盘输入，可以用来读取文件。
 
 ```bash
+#!/bin/bash
+
+filename='/etc/hosts'
+
 while read myline
 do
   echo "$myline"
 done < $filename
 ```
 
-上面的例子通过`read`命令，读取一个文件的内容。`done`命令后面的定向符`<`，将文件导向`read`命令，每次读取一行，存入变量`myline`，直到文件读取完毕。
+上面的例子通过`read`命令，读取一个文件的内容。`done`命令后面的定向符`<`，将文件内容导向`read`命令，每次读取一行，存入变量`myline`，直到文件读取完毕。
 
 ## 参数
 
