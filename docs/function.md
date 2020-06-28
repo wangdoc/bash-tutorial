@@ -185,11 +185,14 @@ global: foo = 1
 函数体内不仅可以声明全局变量，还可以修改全局变量。
 
 ```bash
+#! /bin/bash
 foo=1
 
 fn () {
   foo=2
 }
+
+fn
 
 echo $foo
 ```
@@ -199,6 +202,7 @@ echo $foo
 函数里面可以用`local`命令声明局部变量。
 
 ```bash
+#! /bin/bash
 # 脚本 test.sh
 fn () {
   local foo
