@@ -64,7 +64,7 @@ $ bash --noprofile
 - `/etc/bash.bashrc`：对全体用户有效。
 - `~/.bashrc`：仅对当前用户有效。
 
-对用户来说，`~/.bashrc`通常是最重要的脚本。非登录 Session 默认会执行它，而登陆 Session 一般也会通过调用执行它。由于每次执行 Bash 脚本，都会新建一个非登录 Session，所以`~/.bashrc`也是每次执行脚本都会执行的。
+对用户来说，`~/.bashrc`通常是最重要的脚本。非登录 Session 默认会执行它，而登录 Session 一般也会通过调用执行它。每次新建一个 Bash 窗口，就相当于新建一个非登录 Session，所以`~/.bashrc`每次都会执行。注意，执行脚本相当于新建一个非互动的 Bash 环境，但是这种情况不会调用`~/.bashrc`。
 
 `bash`命令的`--norc`参数，可以禁止在非登录 Session 执行`~/.bashrc`脚本。
 
