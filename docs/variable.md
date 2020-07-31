@@ -331,7 +331,7 @@ ${varname:?message}
 
 上面语法的含义是，如果变量`varname`存在且不为空，则返回它的值，否则打印出`varname: message`，并中断脚本的执行。如果省略了`message`，则输出默认的信息“parameter null or not set.”。它的目的是防止变量未定义，比如`${count:?"undefined!"}`表示变量`count`未定义时就中断执行，抛出错误，返回给定的报错信息`undefined!`。
 
-上面四种语法如果用在脚本中，变量名的部分可以用到数字`1`到`9`，表示脚本的参数。
+上面四种语法如果用在脚本中，变量名的部分可以用数字`1`到`9`，表示脚本的参数。
 
 ```bash
 filename=${1:?"filename missing."}
