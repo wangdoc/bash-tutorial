@@ -11,7 +11,8 @@
     "build-and-commit": "npm run build && npm run commit",
     "commit": "gh-pages --dist dist --dest dist/bash --branch master --repo git@github.com:wangdoc/website.git",
     "chapter": "loppo chapter",
-    "server": "loppo server"
+    "server": "loppo server",
+    "pdf": "node ./command/pdf.js"
   },
   "repository": {
     "type": "git",
@@ -37,5 +38,8 @@
     "husky": "^4.2.5",
     "loppo": "latest",
     "loppo-theme-wangdoc": "^0.4.6"
+  },
+  "devDependencies": {
+    "markdown-pdf": "^10.0.0"
   }
 }
