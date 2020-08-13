@@ -45,7 +45,7 @@ function dfsGenerate(relativePath) {
     if (fs.statSync(curPath).isDirectory()) {
       !fs.existsSync(pdfPath) && fs.mkdirSync(pdfPath)
       dfsGenerate(path.join(relativePath, dir))
-    } else {
+    } else if (dir.endsWith('.md')) {
       walker.addTask(() =>
         new Promise((resolve, reject) => {
           const finalPdfPath = pdfPath.replace('.md', '.pdf')
