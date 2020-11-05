@@ -34,7 +34,7 @@
   "homepage": "https://github.com/wangdoc/bash-tutorial#readme",
   "dependencies": {
     "gh-pages": "^2.2.0",
-    "husky": "^4.2.5",
+    "husky": "^4.3.0",
     "loppo": "latest",
     "loppo-theme-wangdoc": "^0.4.6"
   }
