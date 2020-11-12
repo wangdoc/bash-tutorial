@@ -338,7 +338,7 @@ $ ./select.sh
 
 echo "Which Operating System do you like?"
 
-select os in Ubuntu LinuxMint Windows8 Windows7 WindowsXP
+select os in Ubuntu LinuxMint Windows8 Windows10 WindowsXP
 do
   case $os in
     "Ubuntu"|"LinuxMint")
