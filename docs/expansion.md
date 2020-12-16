@@ -319,11 +319,14 @@ aA1b aA2b aB3b aB4b
 大括号也可以与其他模式联用，并且总是先于其他模式进行扩展。
 
 ```bash
-$ echo {cat,d*}
-cat dawg dg dig dog doug dug
+$ echo /bin/{cat,d*}
+/bin/cat /bin/b2sum /bin/base32 /bin/base64 ... ...
+
+# 基本等同于
+$ echo /bin/cat;echo /bin/b*
 ```
 
-上面例子中，会先进行大括号扩展，然后进行`*`扩展。
+上面例子中，会先进行大括号扩展，然后进行`*`扩展，等同于执行两条`echo`命令。
 
 大括号可以用于多字符的模式，方括号不行（只能匹配单字符）。
 
