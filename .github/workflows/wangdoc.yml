@@ -31,7 +31,7 @@ jobs:
           BASE_BRANCH: master
           BRANCH: master # The branch the action should deploy to.
           FOLDER: dist # The folder the action should deploy.
-          TARGET_FOLDER: dist/ssh
+          TARGET_FOLDER: dist/bash
           CLEAN: true # Automatically remove deleted files from the deploy branch
           COMMIT_MESSAGE: update
 
