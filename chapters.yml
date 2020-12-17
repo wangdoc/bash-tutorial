@@ -13,7 +13,7 @@
 - loop.md: 循环
 - function.md: 函数
 - array.md: 数组
-- set.md: set 命令
+- set.md: set 命令，shopt 命令
 - debug.md: 脚本除错
 - mktemp.md: mktemp 命令，trap 命令
 - startup.md: 启动环境

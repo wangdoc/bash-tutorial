@@ -1,4 +1,4 @@
-# set 命令
+# set 命令，shopt 命令
 
 `set`命令是 Bash 脚本的重要环节，却常常被忽视，导致脚本的安全性和可维护性出问题。本章介绍`set`的基本用法，帮助你写出更安全的 Bash 脚本。
 
@@ -259,6 +259,57 @@ script.sh:行4: foo: 未找到命令
 
 可以看到，`echo bar`没有执行。
 
+## set -E
+
+设置`-e`参数，会导致`trap`命令失效（参考《trap 命令》一章），`-E`参数可以纠正这个行为。
+
+```bash
+#!/bin/bash
+set -euo pipefail
+
+trap "echo ERR trap fired!" ERR
+
+myfunc()
+{
+  # 'foo' 是一个不存在的命令
+  foo
+}
+
+myfunc
+```
+
+上面的脚本，`myfunc`函数调用了一个不存在的命令`foo`，导致执行这个函数会报错。
+
+```bash
+$ bash test.sh
+test.sh:行9: foo：未找到命令
+```
+
+但是，由于设置了`set -e`，脚本报错后并没有被`trap`命令捕获，需要加上`-E`参数才可以。
+
+```bash
+#!/bin/bash
+set -Eeuo pipefail
+
+trap "echo ERR trap fired!" ERR
+
+myfunc()
+{
+  # 'foo' 是一个不存在的命令
+  foo
+}
+
+myfunc
+```
+
+执行上面这个脚本，就可以看到`trap`命令生效了。
+
+```bash
+$ bash test.sh
+test.sh:行9: foo：未找到命令
+ERR trap fired!
+```
+
 ## 其他参数
 
 `set`命令还有一些其他参数。
@@ -271,14 +322,14 @@ script.sh:行4: foo: 未找到命令
 
 ## set 命令总结
 
-上面重点介绍的`set`命令的四个参数，一般都放在一起使用。
+上面重点介绍的`set`命令的几个参数，一般都放在一起使用。
 
 ```bash
 # 写法一
-set -euxo pipefail
+set -Eeuxo pipefail
 
 # 写法二
-set -eux
+set -Eeux
 set -o pipefail
 ```
 
