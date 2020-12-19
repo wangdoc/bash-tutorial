@@ -319,7 +319,7 @@ aA1b aA2b aB3b aB4b
 大括号也可以与其他模式联用，并且总是先于其他模式进行扩展。
 
 ```bash
-$ echo /bin/{cat,d*}
+$ echo /bin/{cat,b*}
 /bin/cat /bin/b2sum /bin/base32 /bin/base64 ... ...
 
 # 基本等同于
