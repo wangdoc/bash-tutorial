@@ -21,7 +21,7 @@ _krb_kadmin:*:231:-2:Open Directory Kerberos Admin Service:/var/empty:/usr/bin/f
 $ grep -FR 'someVar' .
 ```
 
-別忘了大小不敏感的参数，因为 grep 默认搜索是大小写敏感的。
+別忘了大小不敏感的参数，因为 `grep` 默认搜索是大小写敏感的。
 
 ```bash
 $ grep -iR 'somevar' .
@@ -33,7 +33,7 @@ $ grep -iR 'somevar' .
 $ grep -lR 'somevar' .
 ```
 
-如果你写的脚本或批处理任务需要上面的输出内容，可以使用 while 和 read 来处理文件名中的空格和其他特殊字符：
+如果你写的脚本或批处理任务需要上面的输出内容，可以使用 `while` 和 `read` 来处理文件名中的空格和其他特殊字符：
 
 ```bash
 grep -lR someVar | while IFS= read -r file; do
@@ -41,13 +41,13 @@ grep -lR someVar | while IFS= read -r file; do
 done
 ```
 
-如果你在你的项目里使用了版本控制软件，它通常会在 .svn， .git， .hg 目录下包含一些元数据。你也可以很容易地用 grep -v 把这些目录移出搜索范围，当然得用 grep -F 指定一个恰当且确定的字符串，即要移除的目录名：
+如果你在你的项目里使用了版本控制软件，它通常会在 `.svn`， `.git`， `.hg` 目录下包含一些元数据。你也可以很容易地用 `grep -v` 把这些目录移出搜索范围，当然得用 `grep -F` 指定一个恰当且确定的字符串，即要移除的目录名：
 
 ```bash
 $ grep -R 'someVar' . | grep -vF '.svn'
 ```
 
-部分版本的 grep 包含了 --exclude 和 --exclude-dir 选项，这看起来更加易读。
+部分版本的 `grep` 包含了 `--exclude` 和 `--exclude-dir` 选项，这看起来更加易读。
 
 ## 参数
 
