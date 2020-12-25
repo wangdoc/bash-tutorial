@@ -261,11 +261,11 @@ script.sh:行4: foo: 未找到命令
 
 ## set -E
 
-设置`-e`参数，会导致`trap`命令失效（参考《trap 命令》一章），`-E`参数可以纠正这个行为。
+一旦设置了`-e`参数，会导致函数内的错误不会被`trap`命令捕获（参考《trap 命令》一章）。`-E`参数可以纠正这个行为，使得函数也能继承`trap`命令。
 
 ```bash
 #!/bin/bash
-set -euo pipefail
+set -e
 
 trap "echo ERR trap fired!" ERR
 
@@ -278,14 +278,14 @@ myfunc()
 myfunc
 ```
 
-上面的脚本，`myfunc`函数调用了一个不存在的命令`foo`，导致执行这个函数会报错。
+上面示例中，`myfunc`函数内部调用了一个不存在的命令`foo`，导致执行这个函数会报错。
 
 ```bash
 $ bash test.sh
 test.sh:行9: foo：未找到命令
 ```
 
-但是，由于设置了`set -e`，脚本报错后并没有被`trap`命令捕获，需要加上`-E`参数才可以。
+但是，由于设置了`set -e`，函数内部的报错并没有被`trap`命令捕获，需要加上`-E`参数才可以。
 
 ```bash
 #!/bin/bash
