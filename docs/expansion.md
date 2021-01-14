@@ -601,13 +601,19 @@ $ shopt extglob
 extglob        	on
 ```
 
+如果`extglob`参数是关闭的，可以用下面的命令打开。
+
+```bash
+$ shopt -s extglob
+```
+
 量词语法有下面几个。
 
 - `?(pattern-list)`：匹配零个或一个模式。
 - `*(pattern-list)`：匹配零个或多个模式。
 - `+(pattern-list)`：匹配一个或多个模式。
 - `@(pattern-list)`：只匹配一个模式。
-- `!(pattern-list)`：匹配零个或一个以上的模式，但不匹配单独一个的模式。
+- `!(pattern-list)`：匹配给定模式以外的任何内容。
 
 ```bash
 $ ls abc?(.)txt
@@ -636,6 +642,13 @@ abc.txt abc.txt.txt
 ```
 
 上面例子中，`+(.txt)`匹配文件有一个或多个`.txt`后缀名。
+
+```bash
+$ ls a?(b).txt
+a.txt abb.txt ac.txt
+```
+
+上面例子中，`?(b)`表示匹配单个字母`b`以外的任意内容。
 
 量词语法也属于文件名扩展，如果不存在可匹配的文件，就会原样输出。
 
