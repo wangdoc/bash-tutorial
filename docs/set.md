@@ -14,7 +14,7 @@ $ bash script.sh
 
 `set`命令用来修改子 Shell 环境的运行参数，即定制环境。一共有十几个参数可以定制，[官方手册](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html)有完整清单，本章介绍其中最常用的几个。
 
-顺便提一下，如果命令行下不带任何参数，直接运行`set`，会显示所noclobber有的环境变量和 Shell 函数。
+顺便提一下，如果命令行下不带任何参数，直接运行`set`，会显示所有的环境变量和 Shell 函数。
 
 ```bash
 $ set
