@@ -68,13 +68,13 @@ $ mp3s=( *.mp3 )
 $ declare -a ARRAYNAME
 ```
 
-`read -a`命令则是将用户的命令行输入，读入一个数组。
+`read -a`命令则是将用户的命令行输入，存入一个数组。
 
 ```bash
 $ read -a dice
 ```
 
-上面命令将用户的命令行输入，读入数组`dice`。
+上面命令将用户的命令行输入，存入数组`dice`。
 
 ## 读取数组
 
@@ -136,7 +136,7 @@ Activity: rafting
 Activity: surfing
 ```
 
-上面的例子中，数组`activities`实际包含5个元素，但是`for...in`循环直接遍历`${activities[@]}`，会导致返回7个结果。为了避免这种情况，一般把`${activities[@]}`放在双引号之中。
+上面的例子中，数组`activities`实际包含5个成员，但是`for...in`循环直接遍历`${activities[@]}`，导致返回7个结果。为了避免这种情况，一般把`${activities[@]}`放在双引号之中。
 
 ```bash
 $ for act in "${activities[@]}"; \
@@ -170,7 +170,7 @@ Activity: rafting
 Activity: surfing
 ```
 
-`${activities[*]}`放在双引号之中，所有元素就会变成单个字符串返回。
+`${activities[*]}`放在双引号之中，所有成员就会变成单个字符串返回。
 
 ```bash
 $ for act in "${activities[*]}"; \
@@ -397,7 +397,7 @@ colors["green"]="#00ff00"
 colors["blue"]="#0000ff"
 ```
 
-整数索引的数组，可以直接使用变量名创建数组，关联数组则必须用带有`-A`选项的`declare`命令声明创建。
+关联数组必须用带有`-A`选项的`declare`命令声明创建。相比之下，整数索引的数组，可以直接使用变量名创建数组，关联数组就不行。
 
 访问关联数组成员的方式，几乎与整数索引数组相同。
 
