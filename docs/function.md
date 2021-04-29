@@ -38,7 +38,7 @@ hello() {
 
 ```bash
 $ hello world
-hello world
+Hello world
 ```
 
 下面是一个多行函数的例子，显示当前日期时间。
