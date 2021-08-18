@@ -192,7 +192,7 @@ $ hobbies=( "${activities[@]}" )
 这种写法也可以用来为新数组添加成员。
 
 ```bash
-$ hobbies=( "${activities[@]" diving )
+$ hobbies=( "${activities[@]}" diving )
 ```
 
 上面例子中，新数组`hobbies`在数组`activities`的所有成员之后，又添加了一个成员。
