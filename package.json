@@ -35,7 +35,7 @@
   "dependencies": {
     "gh-pages": "^3.2.3",
     "husky": "^4.3.8",
-    "loppo": "^0.6.23",
-    "loppo-theme-wangdoc": "^0.5.2"
+    "loppo": "^0.6.24",
+    "loppo-theme-wangdoc": "^0.6.1"
   }
 }
