@@ -256,10 +256,10 @@ $ ls doesnotexist
 ls: doesnotexist: No such file or directory
 
 $ echo $?
-1
+2
 ```
 
-上面例子中，`ls`命令查看一个不存在的文件，导致报错。`$?`为1，表示上一个命令执行失败。
+上面例子中，`ls`命令查看一个不存在的文件，导致报错。`$?`为2，表示上一个命令执行失败。
 
 （2）`$$`
 
