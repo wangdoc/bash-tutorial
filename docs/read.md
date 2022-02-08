@@ -208,7 +208,7 @@ IFS="$OLD_IFS"
 
 另外，上面例子中，`<<<`是 Here 字符串，用于将变量值转为标准输入，因为`read`命令只能解析标准输入。
 
-如果`IFS`设为空字符串，就等同于将整行读入一个变量。
+在对文件进行读取时经常可以看到下面的写法。意思是逐行读取文件，每一行字符原样存入变量`line`，打印出来以后再读取下一行。
 
 ```bash
 #!/bin/bash
@@ -219,5 +219,27 @@ do
 done < "$input"
 ```
 
-上面的命令可以逐行读取文件，每一行存入变量`line`，打印出来以后再读取下一行。
+这里`IFS=`的作用是保留每一行前后的空格或制表符部分。read执行流程是每次读取到换行符停止，然后把读取的文本用`IFS`分割后赋值给用户指定的变量，如果使用默认的`IFS`分割，会把首尾的空格、换行符去除。
+
+```bash
+read line <<< "   hello world   "
+echo "$line"
+```
+
+比如执行上面命令得到的结果是：
+
+```bash
+hello world
+```
+
+在`read line`前加上`IFS=`后得到的结果是：
+
+```bash
+   hello world   
+```
+
+
+## 参考链接
+- [Understanding "IFS= read -r line"](https://unix.stackexchange.com/questions/209123/understanding-ifs-read-r-line)
+
 
