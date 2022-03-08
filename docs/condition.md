@@ -177,8 +177,8 @@ fi
 - `[ -u file ]`：如果 file 存在并且设置了 setuid 位，则为`true`。
 - `[ -w file ]`：如果 file 存在并且可写（当前用户拥有可写权限），则为`true`。
 - `[ -x file ]`：如果 file 存在并且可执行（有效用户有执行／搜索权限），则为`true`。
-- `[ file1 -nt file2 ]`：如果 FILE1 比 FILE2 的更新时间最近，或者 FILE1 存在而 FILE2 不存在，则为`true`。
-- `[ file1 -ot file2 ]`：如果 FILE1 比 FILE2 的更新时间更旧，或者 FILE2 存在而 FILE1 不存在，则为`true`。
+- `[ FILE1 -nt FILE2 ]`：如果 FILE1 比 FILE2 的更新时间更近，或者 FILE1 存在而 FILE2 不存在，则为`true`。
+- `[ FILE1 -ot FILE2 ]`：如果 FILE1 比 FILE2 的更新时间更旧，或者 FILE2 存在而 FILE1 不存在，则为`true`。
 - `[ FILE1 -ef FILE2 ]`：如果 FILE1 和 FILE2 引用相同的设备和 inode 编号，则为`true`。
 
 下面是一个示例。
