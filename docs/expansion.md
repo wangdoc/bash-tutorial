@@ -609,10 +609,10 @@ $ shopt -s extglob
 
 量词语法有下面几个。
 
-- `?(pattern-list)`：匹配零个或一个模式。
-- `*(pattern-list)`：匹配零个或多个模式。
-- `+(pattern-list)`：匹配一个或多个模式。
-- `@(pattern-list)`：只匹配一个模式。
+- `?(pattern-list)`：模式匹配零次或一次。
+- `*(pattern-list)`：模式匹配零次或多次。
+- `+(pattern-list)`：模式匹配一次或多次。
+- `@(pattern-list)`：只匹配一次模式。
 - `!(pattern-list)`：匹配给定模式以外的任何内容。
 
 ```bash
@@ -630,11 +630,11 @@ abc abcdef
 上面例子中，`?(def)`匹配零个或一个`def`。
 
 ```bash
-$ ls abc+(.txt|.php)
+$ ls abc@(.txt|.php)
 abc.php abc.txt
 ```
 
-上面例子中，`+(.txt|.php)`匹配文件有一个`.txt`或`.php`后缀名。
+上面例子中，`@(.txt|.php)`匹配文件有且只有一个`.txt`或`.php`后缀名。
 
 ```bash
 $ ls abc+(.txt)
