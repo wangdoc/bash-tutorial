@@ -347,7 +347,7 @@ fi
 利用这一点，可以在脚本中对命令执行结果进行判断。
 
 ```bash
-cd $some_directory
+cd /path/to/somewhere
 if [ "$?" = "0" ]; then
   rm *
 else
@@ -356,12 +356,12 @@ else
 fi
 ```
 
-上面例子中，`cd $some_directory`这个命令如果执行成功（返回值等于`0`），就删除该目录里面的文件，否则退出脚本，整个脚本的返回值变为`1`，表示执行失败。
+上面例子中，`cd /path/to/somewhere`这个命令如果执行成功（返回值等于`0`），就删除该目录里面的文件，否则退出脚本，整个脚本的返回值变为`1`，表示执行失败。
 
 由于`if`可以直接判断命令的执行结果，执行相应的操作，上面的脚本可以改写成下面的样子。
 
 ```bash
-if cd $some_directory; then
+if cd /path/to/somewhere; then
   rm *
 else
   echo "Could not change directory! Aborting." 1>&2
@@ -373,10 +373,10 @@ fi
 
 ```bash
 # 第一步执行成功，才会执行第二步
-cd $some_directory && rm *
+cd /path/to/somewhere && rm *
 
 # 第一步执行失败，才会执行第二步
-cd $some_directory || exit 1
+cd /path/to/somewhere || exit 1
 ```
 
 ## source 命令
