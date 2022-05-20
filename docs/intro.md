@@ -30,10 +30,17 @@ Shell 有很多种，只要能给用户提供命令行环境的程序，都可�
 
 Bash 是目前最常用的 Shell，除非特别指明，下文的 Shell 和 Bash 当作同义词使用，可以互换。
 
-下面的命令可以查看当前运行的 Shell。
+下面的命令可以查看当前设备默认的 Shell。
 
 ```bash
 $ echo $SHELL
+/bin/bash
+```
+
+下面的命令可以查看当前运行的 Shell。
+
+```bash
+$ echo $0
 /bin/bash
 ```
 
