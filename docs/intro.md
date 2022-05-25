@@ -30,12 +30,24 @@ Shell 有很多种，只要能给用户提供命令行环境的程序，都可�
 
 Bash 是目前最常用的 Shell，除非特别指明，下文的 Shell 和 Bash 当作同义词使用，可以互换。
 
-下面的命令可以查看当前运行的 Shell。
+下面的命令可以查看当前设备的默认 Shell。
 
 ```bash
 $ echo $SHELL
 /bin/bash
 ```
+
+当前正在使用的 Shell 不一定是默认 Shell，一般来说，`ps`命令结果的倒数第二行是当前 Shell。
+
+```bash
+$ ps
+  PID TTY          TIME CMD
+ 4467 pts/0    00:00:00 bash
+ 5379 pts/0    00:00:00 ps
+```
+
+上面示例中，`ps`命令结果的倒数第二行显示，运行的命令（`cmd`）是`bash`，表明当前正在使用的
+Shell 是 Bash。
 
 下面的命令可以查看当前的 Linux 系统安装的所有 Shell。
 
@@ -43,7 +55,7 @@ $ echo $SHELL
 $ cat /etc/shells
 ```
 
-上面两个命令中，`$`是命令行环境的提示符，用户只需要输入提示符后面的内容。
+上面三个命令中，`$`是命令行环境的提示符，用户只需要输入提示符后面的内容。
 
 Linux 允许每个用户使用不同的 Shell，用户的默认 Shell 一般都是 Bash，或者与 Bash 兼容。
 
