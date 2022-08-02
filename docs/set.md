@@ -398,7 +398,7 @@ $ echo $?
 这个用法主要用于脚本，供`if`条件结构使用。下面例子是如果打开了这个参数，就执行`if`结构内部的语句。
 
 ```bash
-if !(shopt -q globstar); then
+if (shopt -q globstar); then
   ...
 fi
 ```
