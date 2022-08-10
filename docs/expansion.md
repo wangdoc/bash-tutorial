@@ -256,7 +256,7 @@ report3.txt
 这种简写形式有一个否定形式`[!start-end]`，表示匹配不属于这个范围的字符。比如，`[!a-zA-Z]`表示匹配非英文字母的字符。
 
 ```bash
-$ echo report[!1–3].txt
+$ ls report[!1–3].txt
 report4.txt report5.txt
 ```
 
