@@ -365,6 +365,16 @@ fi
 
 上面例子中，`test`命令内部使用的圆括号，必须使用引号或者转义，否则会被 Bash 解释。
 
+使用`-a`连接两个判断条件不太直观，一般推荐使用`&&`代替，上面的脚本可以改写成下面这样。
+
+```bash
+if !([ $INT -ge $MIN_VAL ] && [ $INT -le $MAX_VAL ]); then
+  echo "$INT is outside $MIN_VAL to $MAX_VAL."
+else
+  echo "$INT is in range."
+fi
+```
+
 ### 算术判断
 
 Bash 还提供了`((...))`作为算术条件，进行算术运算的判断。
