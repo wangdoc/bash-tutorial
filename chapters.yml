@@ -5,6 +5,7 @@
 - variable.md: 变量
 - string.md: 字符串操作
 - arithmetic.md: 算术运算
+- history.md: 操作历史
 - readline.md: 行操作
 - stack.md: 目录堆栈
 - script.md: 脚本入门
