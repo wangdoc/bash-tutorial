@@ -131,8 +131,8 @@ Mon Jan 27 13:33:18 CST 2020
 上面例子中，美元符号（`$`）和反引号（`` ` ``）在双引号中，都保持特殊含义。美元符号用来引用变量，反引号则是执行子命令。
 
 ```bash
-$ echo "I'd say: \"hello!\""
-I'd say: "hello!"
+$ echo "I'd say: \"hello.\""
+I'd say: "hello."
 
 $ echo "\\"
 \
