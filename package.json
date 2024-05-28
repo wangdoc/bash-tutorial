@@ -30,6 +30,6 @@
   "dependencies": {
     "gh-pages": "6.x",
     "loppo": "^0.6.25",
-    "loppo-theme-wangdoc": "^0.7.0"
+    "loppo-theme-wangdoc": "^0.7.1"
   }
 }
