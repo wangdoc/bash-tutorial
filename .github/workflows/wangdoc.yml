@@ -24,8 +24,8 @@ jobs:
       - name: Deploy to website
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          git_config_name: wangdoc-bot
-          git_config_email: yifeng.ruan@gmail.com
+          git-config-name: wangdoc-bot
+          git-config-email: yifeng.ruan@gmail.com
           repository-name: wangdoc/website
           token: ${{ secrets.WANGDOC_BOT_TOKEN }}
           branch: master # The branch the action should deploy to.
