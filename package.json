@@ -26,16 +26,10 @@
   "bugs": {
     "url": "https://github.com/wangdoc/bash-tutorial/issues"
   },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm update"
-    }
-  },
   "homepage": "https://github.com/wangdoc/bash-tutorial#readme",
   "dependencies": {
-    "gh-pages": "^5.0.0",
-    "husky": "^4.3.8",
+    "gh-pages": "6.x",
     "loppo": "^0.6.25",
-    "loppo-theme-wangdoc": "^0.6.4"
+    "loppo-theme-wangdoc": "^0.7.0"
   }
 }
