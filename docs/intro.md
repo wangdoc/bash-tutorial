@@ -58,6 +58,22 @@ $ cat /etc/shells
 
 Linux 允许每个用户使用不同的 Shell，用户的默认 Shell 一般都是 Bash，或者与 Bash 兼容。
 
+使用`chsh`命令，可以改变系统的默认 Shell。举例来说，要将默认 Shell 从 Bash 改成 Fish，首先要找出 Fish 可执行文件的位置。
+
+```bash
+$ which fish
+```
+
+上面命令找出 Fish 可执行文件的位置，一般是`/usr/bin/fish`。
+
+然后，使用`chsh`命令切换默认 Shell。
+
+```bash
+$ chsh -s /usr/bin/fish
+```
+
+上面命令会将当前的默认 Shell 改成 Fish。
+
 ## 命令行环境
 
 ### 终端模拟器
